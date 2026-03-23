@@ -361,13 +361,264 @@
       </div>
     </section>
 
+    <section class="hero" style="background: linear-gradient(135deg, #0f766e 0%, #155e75 100%); margin-top: 34px;">
+      <h1>Chapter 7 Study Guide</h1>
+      <p><strong>Understanding Software: A Primer for Managers</strong></p>
+      <p>This chapter focuses on how managers should classify software, understand software layers, and connect software choices to lock-in, usability, and business value.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2 style="color:#0f766e;">Main Framework</h2>
+        <p class="muted">Ask four questions: What does the software do? Who can change the source code? Where does the code run? What standards does it use?</p>
+      </div>
+      <div class="card">
+        <h2 style="color:#0f766e;">Big Manager Idea</h2>
+        <p class="muted">Managers do not need to code every system, but they do need to understand what kind of software they are buying, using, or depending on.</p>
+      </div>
+      <div class="card">
+        <h2 style="color:#0f766e;">Why It Matters</h2>
+        <p class="muted">Software choices influence flexibility, compatibility, lock-in, cost, user experience, and how easily a business can scale.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title" style="color:#0f766e;">Chapter 7 Vocabulary</h2>
+
+      <div class="term">
+        <h3>Software</h3>
+        <p><span class="label">Definition:</span> Software is a set of instructions that tells hardware what to do.</p>
+        <p><span class="label">Why it matters:</span> Managers make decisions about software constantly, even if they never write code themselves.</p>
+        <p><span class="label">Example:</span> Microsoft Excel, Windows, and Salesforce are all software, but they serve different roles.</p>
+      </div>
+
+      <div class="term">
+        <h3>Operating System (OS)</h3>
+        <p><span class="label">Definition:</span> An operating system is the core software layer that manages hardware resources and provides services that other software depends on.</p>
+        <p><span class="label">Why it matters:</span> The OS makes computers usable for both programmers and end users and shapes which other applications can run.</p>
+        <p><span class="label">Example:</span> Windows, macOS, Linux, and iOS are operating systems.</p>
+      </div>
+
+      <div class="term">
+        <h3>Database Management System (DBMS)</h3>
+        <p><span class="label">Definition:</span> A DBMS is software used to store, organize, retrieve, and manage large amounts of structured data.</p>
+        <p><span class="label">Why it matters:</span> Businesses rely on DBMS tools to support applications, reporting, and decision-making.</p>
+        <p><span class="label">Example:</span> MySQL and Oracle Database are DBMS products.</p>
+      </div>
+
+      <div class="term">
+        <h3>User Application</h3>
+        <p><span class="label">Definition:</span> A user application is software designed to help end users perform specific tasks.</p>
+        <p><span class="label">Why it matters:</span> This is the software people interact with directly, so it strongly affects productivity and user experience.</p>
+        <p><span class="label">Example:</span> Excel, Google Docs, and Photoshop are user applications.</p>
+      </div>
+
+      <div class="term">
+        <h3>Closed Source (Proprietary) Software</h3>
+        <p><span class="label">Definition:</span> Closed source software is software whose source code can be modified only by the company or organization that owns it.</p>
+        <p><span class="label">Why it matters:</span> Proprietary software can give owners more control, but it can also increase dependency on the vendor.</p>
+        <p><span class="label">Example:</span> Microsoft Excel is proprietary software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Open Source Software</h3>
+        <p><span class="label">Definition:</span> Open source software is software whose source code is available for others to inspect, modify, and redistribute.</p>
+        <p><span class="label">Why it matters:</span> Open source can increase flexibility and lower dependency on a single vendor.</p>
+        <p><span class="label">Example:</span> Linux is open source software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Local Software</h3>
+        <p><span class="label">Definition:</span> Local software runs on the user’s own machine and does not require a network connection to execute its core functions.</p>
+        <p><span class="label">Why it matters:</span> Local software can offer speed and offline access, but it may be harder to update or share across many users.</p>
+        <p><span class="label">Example:</span> A desktop version of Excel installed on a laptop is local software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Hosted Software</h3>
+        <p><span class="label">Definition:</span> Hosted software runs on a remote server rather than on the user’s device and is accessed through a browser or client.</p>
+        <p><span class="label">Why it matters:</span> Hosted software can simplify collaboration and updates, but it creates dependence on networks and service providers.</p>
+        <p><span class="label">Example:</span> Google Sheets is hosted software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Open Standard</h3>
+        <p><span class="label">Definition:</span> An open standard allows other companies to develop compatible products without needing special permission from the owner.</p>
+        <p><span class="label">Why it matters:</span> Open standards often support broader ecosystems and compatibility.</p>
+        <p><span class="label">Example:</span> Microsoft software often works within relatively open standards compared with closed Apple-only complements.</p>
+      </div>
+
+      <div class="term">
+        <h3>Closed Standard</h3>
+        <p><span class="label">Definition:</span> A closed standard requires permission from the owner before other firms can develop complementary products or compatible software.</p>
+        <p><span class="label">Why it matters:</span> Closed standards can give a firm tighter control over quality and profits, but they may also limit ecosystem growth.</p>
+        <p><span class="label">Example:</span> Apple’s ecosystem is often used as an example of a more closed standard.</p>
+      </div>
+
+      <div class="term">
+        <h3>Konana’s Ecosystem Model</h3>
+        <p><span class="label">Definition:</span> Konana’s Ecosystem Model shows how software and hardware exist in layered dependencies, from hardware up through operating systems, databases, middleware, and applications.</p>
+        <p><span class="label">Why it matters:</span> Because each layer depends on the one below it, choices at one layer can create switching costs and lock-in across the whole stack.</p>
+        <p><span class="label">Example:</span> Choosing a specific operating system can influence what applications and complementary products a firm can use.</p>
+      </div>
+
+      <div class="term">
+        <h3>Lock-in</h3>
+        <p><span class="label">Definition:</span> Lock-in occurs when a user or firm becomes dependent on a product or ecosystem and faces difficulty switching away.</p>
+        <p><span class="label">Why it matters:</span> Lock-in can protect vendors and make switching costly for customers.</p>
+        <p><span class="label">Example:</span> A company that builds many workflows around one software stack may find switching expensive and disruptive.</p>
+      </div>
+
+      <div class="term">
+        <h3>Graphical User Interface (GUI)</h3>
+        <p><span class="label">Definition:</span> A GUI is a visual interface that allows users to interact with software through windows, icons, menus, buttons, and other on-screen elements instead of only command-line text.</p>
+        <p><span class="label">Why it matters:</span> GUIs made computers much easier for non-programmers to use.</p>
+        <p><span class="label">Example:</span> Drop-down menus, check boxes, and icons are all parts of a GUI.</p>
+      </div>
+
+      <div class="term">
+        <h3>Enterprise Resource Planning (ERP)</h3>
+        <p><span class="label">Definition:</span> ERP is integrated software that connects multiple business functions, such as accounting, inventory, HR, and operations, into one shared system.</p>
+        <p><span class="label">Why it matters:</span> ERP software can improve coordination across a business, but it also affects many processes and departments at once.</p>
+        <p><span class="label">Example:</span> A company using one system to manage orders, inventory, payroll, and reporting is using ERP.</p>
+      </div>
+
+      <div class="term">
+        <h3>CRM, SCM, and BI Systems</h3>
+        <p><span class="label">Definition:</span> CRM systems manage customer relationships, SCM systems support supply chain activities, and BI systems analyze data for decision-making.</p>
+        <p><span class="label">Why it matters:</span> Managers should understand how different categories of software support different business goals.</p>
+        <p><span class="label">Example:</span> Salesforce is a CRM example, while a reporting dashboard used by executives is a BI example.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title" style="color:#0f766e;">Key Concepts</h2>
+      <ul>
+        <li>Managers should classify software using four questions: function, source code ownership, execution location, and standards.</li>
+        <li>Software exists in layers, and lower-layer choices affect higher-layer choices.</li>
+        <li>Open versus closed approaches affect compatibility, control, and ecosystem growth.</li>
+        <li>Local versus hosted software changes cost structure, convenience, and dependency on networks.</li>
+        <li>GUIs expanded computer use by making systems accessible to non-programmers.</li>
+        <li>Enterprise software such as ERP, CRM, SCM, and BI can influence major business processes and coordination.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title" style="color:#0f766e;">Interactive Practice Quiz</h2>
+
+      <div class="question chapter7-question" data-correct="C">
+        <h3>1. A retail manager is comparing two spreadsheet tools for her team. One runs entirely in a browser, updates automatically, and lets employees collaborate from different locations. The other is installed on each employee’s laptop and works even without internet access. She wants to classify the first tool correctly before recommending it.</h3>
+        <p><strong>Which description BEST classifies the browser-based tool?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. It is local software because employees use it on their own computers</button>
+          <button class="choice-btn" data-choice="B">B. It is an operating system because it helps users complete work</button>
+          <button class="choice-btn" data-choice="C">C. It is hosted software because the code runs on a remote server and users access it through a browser or client</button>
+          <button class="choice-btn" data-choice="D">D. It is a closed standard because it requires login credentials</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question chapter7-question" data-correct="A">
+        <h3>2. A manager is trying to explain why choosing an operating system matters even if employees mostly care about the apps they use every day. She points out that one software decision can affect which applications are available, how easily systems connect, and how difficult it is to switch later.</h3>
+        <p><strong>Which idea from Konana’s Ecosystem Model BEST supports her explanation?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Software layers depend on the layers beneath them, so one choice can create lock-in across the stack</button>
+          <button class="choice-btn" data-choice="B">B. The best software choice is always the cheapest one available to end users</button>
+          <button class="choice-btn" data-choice="C">C. User applications are more important than every other software layer combined</button>
+          <button class="choice-btn" data-choice="D">D. Hardware decisions do not affect software compatibility in meaningful ways</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question chapter7-question" data-correct="D">
+        <h3>3. A company is deciding between a proprietary software product and an open source alternative. One executive says proprietary software means the vendor keeps control of the code, while another says open source means anyone can inspect and modify the source code. A third executive confuses open source with free-to-use software.</h3>
+        <p><strong>Which statement is MOST accurate?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Open source means the software must always be free of charge for every possible use</button>
+          <button class="choice-btn" data-choice="B">B. Proprietary software is always hosted, while open source software is always local</button>
+          <button class="choice-btn" data-choice="C">C. Open source and open standards mean exactly the same thing in every context</button>
+          <button class="choice-btn" data-choice="D">D. Proprietary software limits who can modify the source code, while open source software makes the code available for inspection and modification</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question chapter7-question" data-correct="B">
+        <h3>4. An older executive remembers when many computer tasks required typed commands and special training. She is amazed that new employees can quickly navigate software using menus, check boxes, icons, and buttons. She asks why this change mattered so much for business adoption of software.</h3>
+        <p><strong>What is the BEST answer?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. It reduced the need for hardware and eliminated the operating system layer</button>
+          <button class="choice-btn" data-choice="B">B. It made computing easier for non-programmers by replacing pure command-line interaction with visual controls</button>
+          <button class="choice-btn" data-choice="C">C. It turned all software into enterprise software used only by large firms</button>
+          <button class="choice-btn" data-choice="D">D. It guaranteed that all applications would work across every operating system</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question chapter7-question" data-correct="C">
+        <h3>5. A business is evaluating an ERP system and asks which departments could be affected by the implementation. One manager assumes ERP is just accounting software, while another says it can influence many connected processes across the firm.</h3>
+        <p><strong>Which response BEST reflects the chapter?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. ERP mainly affects only payroll, so other departments usually see no changes</button>
+          <button class="choice-btn" data-choice="B">B. ERP is basically the same thing as a graphical user interface</button>
+          <button class="choice-btn" data-choice="C">C. ERP can affect multiple functions such as accounting, inventory, operations, HR, and coordination across departments</button>
+          <button class="choice-btn" data-choice="D">D. ERP matters only when a company is choosing between open source and proprietary software</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
     <footer>
-      MIS 301 Extra Credit Study Guide • Chapter 6 Template
+      MIS 301 Extra Credit Study Guide • Chapters 6–7
     </footer>
   </div>
 
   <script>
     const feedbackMap = {
+      6: {
+        correct: 'C',
+        rationale: {
+          A: "A is incorrect because software being used on a person’s computer does not automatically make it local. The key distinction is where the code executes. In the scenario, the browser-based tool runs remotely rather than primarily on the user’s machine.",
+          B: "B is incorrect because an operating system manages hardware resources and supports other software. A browser-based spreadsheet tool is a user application, not an operating system.",
+          C: "C is correct because hosted software runs on a remote server and is accessed through a browser or client. The collaboration and automatic updates described in the scenario are classic features of hosted software.",
+          D: "D is incorrect because needing login credentials does not define a closed standard. Standards are about compatibility and permission for complementary development, not basic authentication."
+        }
+      },
+      7: {
+        correct: 'A',
+        rationale: {
+          A: "A is correct because Konana’s Ecosystem Model emphasizes layered dependency. Choices made at lower layers, such as the operating system, can influence what applications, databases, and complementary tools can be used, which creates lock-in.",
+          B: "B is incorrect because the model is not about always choosing the cheapest software. It is about understanding dependencies among hardware and software layers.",
+          C: "C is incorrect because user applications matter, but the whole point of the model is that they depend on lower layers. They are not independent of everything underneath them.",
+          D: "D is incorrect because hardware and operating system choices absolutely can affect compatibility. The chapter emphasizes that these ecosystem layers shape later software options."
+        }
+      },
+      8: {
+        correct: 'D',
+        rationale: {
+          A: "A is incorrect because open source does not simply mean free of charge in all situations. It refers to source code availability and the right to inspect, modify, and redistribute the code under the relevant license.",
+          B: "B is incorrect because proprietary versus open source is a different question from local versus hosted. A product can be open source and hosted, or proprietary and local.",
+          C: "C is incorrect because open source and open standards are related ideas but not identical. Open source refers to source code availability, while open standards refer to compatibility rules others can build on.",
+          D: "D is correct because this is the core distinction. Proprietary software limits who can change the code, while open source software makes source code available for inspection and modification."
+        }
+      },
+      9: {
+        correct: 'B',
+        rationale: {
+          A: "A is incorrect because GUIs did not eliminate hardware or the operating system. They changed how users interact with software, not the need for lower layers of the computing stack.",
+          B: "B is correct because the GUI made software more accessible to non-programmers by replacing command-line-only interaction with visual controls such as menus, icons, and buttons.",
+          C: "C is incorrect because GUIs did not turn all software into enterprise software. They expanded usability across many kinds of software, including consumer and office applications.",
+          D: "D is incorrect because GUIs do not guarantee cross-platform compatibility. Compatibility depends on software design, standards, and operating system support."
+        }
+      },
+      10: {
+        correct: 'C',
+        rationale: {
+          A: "A is incorrect because ERP is not limited to payroll. The chapter treats ERP as integrated enterprise software that can affect many departments and business processes.",
+          B: "B is incorrect because ERP is not a type of interface like a GUI. It is a category of enterprise software that integrates multiple functions.",
+          C: "C is correct because ERP systems often connect functions such as accounting, inventory, HR, operations, and other cross-department workflows. That broad integration is exactly why managers need to understand ERP’s organizational impact.",
+          D: "D is incorrect because ERP decisions involve much more than the open source versus proprietary question. The main point is cross-functional integration and process impact."
+        }
+      },
       1: {
         correct: 'B',
         rationale: {
