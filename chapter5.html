@@ -1,1 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 5 Study Guide</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #bf5700;
+      --accent-dark: #8f3f00;
+      --border: #e5e7eb;
+      --success: #166534;
+      --error: #991b1b;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-inner {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: var(--accent-dark);
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.4rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 8px 0;
+      font-size: 1.05rem;
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .card h2, .section-title {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .term {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .term:first-of-type,
+    .question:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .term h3,
+    .question h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .question {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #d1d5db;
+    }
+
+    .choice-btn.correct-choice {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .choice-btn.incorrect-choice {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.correct {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 28px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 1.9rem; }
+      .container { padding: 20px 14px 40px; }
+      .hero, .section, .card { padding: 20px; }
+      .nav-inner { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="brand">MIS 301 Study Guides</span>
+      <a href="index.html">Home</a>
+      <a href="chapter1.html">Chapter 1</a>
+      <a href="chapter2.html">Chapter 2</a>
+      <a href="chapter3.html">Chapter 3</a>
+      <a href="chapter4.html">Chapter 4</a>
+      <a href="chapter5.html">Chapter 5</a>
+      <a href="chapter6.html">Chapter 6</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Chapter 5 Study Guide</h1>
+      <p><strong>Zara: Fast Fashion from Savvy Systems</strong></p>
+      <p>This chapter explains how Zara built competitive advantage through speed, vertical integration, finely tuned logistics, and information systems that support its unique business model.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>What to Know</h2>
+        <p class="muted">This chapter is about how Zara uses technology, data, and operations to move fashion ideas into stores much faster than rivals.</p>
+      </div>
+      <div class="card">
+        <h2>Main Theme</h2>
+        <p class="muted">Zara wins not by spending the most on technology, but by aligning relatively simple technologies with a tightly coordinated business model built around speed and responsiveness.</p>
+      </div>
+      <div class="card">
+        <h2>Manager Takeaway</h2>
+        <p class="muted">Technology creates the most value when it supports a coherent strategy. Zara’s systems matter because they are tied directly to how the company designs, produces, and distributes fashion quickly.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Vocabulary</h2>
+
+      <div class="term">
+        <h3>Fast Fashion</h3>
+        <p><span class="label">Definition:</span> Fast fashion is a business model built around quickly designing, producing, and delivering trendy clothing at affordable prices.</p>
+        <p><span class="label">Why it matters:</span> Zara’s entire advantage depends on being able to respond to trends much faster than traditional apparel retailers.</p>
+        <p><span class="label">Example:</span> Zara can move a concept from idea to store in a much shorter time than rivals that rely on seasonal collections.</p>
+      </div>
+
+      <div class="term">
+        <h3>Vertical Integration</h3>
+        <p><span class="label">Definition:</span> Vertical integration occurs when one firm controls multiple stages of its supply chain or production process.</p>
+        <p><span class="label">Why it matters:</span> Zara uses vertical integration to coordinate design, manufacturing, logistics, and store delivery more tightly than competitors.</p>
+        <p><span class="label">Example:</span> Zara controls more of its production and distribution process than firms that outsource nearly everything.</p>
+      </div>
+
+      <div class="term">
+        <h3>Just-in-Time Manufacturing</h3>
+        <p><span class="label">Definition:</span> Just-in-time manufacturing is a production approach that aims to produce goods close to the time they are needed, reducing excess inventory.</p>
+        <p><span class="label">Why it matters:</span> Zara’s responsiveness depends on producing smaller quantities quickly instead of committing to huge inventories far in advance.</p>
+        <p><span class="label">Example:</span> Zara can replenish or adjust production based on current store demand rather than guessing months earlier.</p>
+      </div>
+
+      <div class="term">
+        <h3>Inventory Turnover</h3>
+        <p><span class="label">Definition:</span> Inventory turnover measures how quickly inventory is sold and replaced over time.</p>
+        <p><span class="label">Why it matters:</span> Zara’s fast model leads to quicker turnover, fewer markdowns, and lower risk of being stuck with unsold fashion items.</p>
+        <p><span class="label">Example:</span> A retailer that sells products quickly and replenishes often has higher inventory turnover than one stuck with old stock.</p>
+      </div>
+
+      <div class="term">
+        <h3>Markdowns</h3>
+        <p><span class="label">Definition:</span> Markdowns are price reductions used to clear unsold inventory.</p>
+        <p><span class="label">Why it matters:</span> Zara’s speed helps reduce markdowns because it is less likely to overproduce styles that go out of fashion.</p>
+        <p><span class="label">Example:</span> A clothing store discounting last season’s items is using markdowns to clear inventory.</p>
+      </div>
+
+      <div class="term">
+        <h3>RFID (Radio Frequency Identification)</h3>
+        <p><span class="label">Definition:</span> RFID is a technology that uses tags and radio signals to track items automatically.</p>
+        <p><span class="label">Why it matters:</span> Zara uses RFID to improve inventory visibility, speed store operations, and reduce errors in product tracking.</p>
+        <p><span class="label">Example:</span> Employees can quickly identify where specific items are located by scanning RFID-tagged products.</p>
+      </div>
+
+      <div class="term">
+        <h3>Demand Signal</h3>
+        <p><span class="label">Definition:</span> A demand signal is information that shows what customers are buying, asking for, or responding to in the market.</p>
+        <p><span class="label">Why it matters:</span> Zara relies on store-level demand signals to guide design and production decisions almost in real time.</p>
+        <p><span class="label">Example:</span> Sales data and employee observations about what customers request are both demand signals.</p>
+      </div>
+
+      <div class="term">
+        <h3>Responsive Supply Chain</h3>
+        <p><span class="label">Definition:</span> A responsive supply chain is a supply chain designed to react quickly to changes in demand or market conditions.</p>
+        <p><span class="label">Why it matters:</span> Zara’s edge comes from responsiveness rather than just low cost.</p>
+        <p><span class="label">Example:</span> Quickly changing design, color, or quantity based on what is selling is part of a responsive supply chain.</p>
+      </div>
+
+      <div class="term">
+        <h3>Finely Tuned Logistics</h3>
+        <p><span class="label">Definition:</span> Finely tuned logistics refers to highly coordinated movement of products through manufacturing, warehousing, and distribution.</p>
+        <p><span class="label">Why it matters:</span> Zara’s speed depends not just on design and production, but on moving products efficiently to stores.</p>
+        <p><span class="label">Example:</span> Coordinating shipments from centralized facilities to stores on a predictable schedule is part of fine-tuned logistics.</p>
+      </div>
+
+      <div class="term">
+        <h3>Contract Manufacturing</h3>
+        <p><span class="label">Definition:</span> Contract manufacturing is the outsourcing of production to outside firms instead of making products internally.</p>
+        <p><span class="label">Why it matters:</span> Zara’s model differs from firms like Gap because it relies less on pure outsourcing and more on internal control for speed.</p>
+        <p><span class="label">Example:</span> A retailer hiring an outside factory to produce large batches months in advance is using contract manufacturing.</p>
+      </div>
+
+      <div class="term">
+        <h3>Business Model Alignment</h3>
+        <p><span class="label">Definition:</span> Business model alignment means that a firm’s operations, information systems, and strategy all support each other coherently.</p>
+        <p><span class="label">Why it matters:</span> Zara’s technology works because it is tightly aligned with a business model built around rapid fashion response.</p>
+        <p><span class="label">Example:</span> RFID, store feedback, centralized logistics, and in-house production all support the same strategic goal at Zara.</p>
+      </div>
+
+      <div class="term">
+        <h3>Cycle Time</h3>
+        <p><span class="label">Definition:</span> Cycle time is the amount of time required to complete a process from start to finish.</p>
+        <p><span class="label">Why it matters:</span> Zara lowers cycle time from idea to store, which is central to its competitive advantage.</p>
+        <p><span class="label">Example:</span> Reducing the time between spotting a trend and stocking a product in stores lowers cycle time.</p>
+      </div>
+
+      <div class="term">
+        <h3>Sell-Through</h3>
+        <p><span class="label">Definition:</span> Sell-through refers to how much of a product is sold to customers relative to the amount supplied to stores.</p>
+        <p><span class="label">Why it matters:</span> Strong sell-through means Zara can move merchandise without relying heavily on markdowns.</p>
+        <p><span class="label">Example:</span> If most units of a new style sell quickly at full price, the product has strong sell-through.</p>
+      </div>
+
+      <div class="term">
+        <h3>Scarcity Effect</h3>
+        <p><span class="label">Definition:</span> The scarcity effect occurs when customers buy sooner because they believe an item may sell out and not return.</p>
+        <p><span class="label">Why it matters:</span> Zara benefits when shoppers feel urgency to buy items immediately instead of waiting for future sales.</p>
+        <p><span class="label">Example:</span> Customers purchasing today because they think the item will not still be there next week shows the scarcity effect.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Key Concepts</h2>
+      <ul>
+        <li>Zara competes on speed and responsiveness rather than only on low production cost.</li>
+        <li>Vertical integration gives Zara more control over design, production, and distribution than many competitors have.</li>
+        <li>Technology such as RFID and store-level data collection supports Zara’s fast-response model.</li>
+        <li>Faster inventory turnover reduces markdowns, write-offs, and fashion risk.</li>
+        <li>Zara’s information systems matter because they are tied directly to its business model, not because they are unusually advanced or expensive.</li>
+        <li>The company’s logistics, demand sensing, and production system all work together to reduce cycle time.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Interactive Practice Quiz</h2>
+
+      <div class="question" data-qid="c5q1" data-correct="B">
+        <h3>1. A clothing retailer tries to compete by producing very large quantities far in advance using outside contractors in distant locations. Another retailer keeps more design and production control in-house, makes smaller batches, and adjusts more quickly based on current customer demand.</h3>
+        <p><strong>Which explanation BEST captures why the second retailer may outperform the first in fast fashion?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The second retailer wins mainly because it always has the lowest manufacturing cost per unit</button>
+          <button class="choice-btn" data-choice="B">B. The second retailer is more responsive because tighter control and shorter cycle times help it react faster to changing demand</button>
+          <button class="choice-btn" data-choice="C">C. The second retailer has no supply chain and therefore avoids all logistics costs</button>
+          <button class="choice-btn" data-choice="D">D. The second retailer is guaranteed to eliminate rivalry in the industry</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c5q2" data-correct="D">
+        <h3>2. A manager says Zara’s advantage comes from using the newest and most expensive technology in the fashion industry. Another manager says the real advantage is that Zara uses relatively simple technologies in a way that perfectly supports its strategy and operations.</h3>
+        <p><strong>Which response BEST fits the chapter?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The first manager is right, because technology spending alone creates sustainable competitive advantage</button>
+          <button class="choice-btn" data-choice="B">B. Both managers are right, because Zara’s success depends mainly on owning unique hardware</button>
+          <button class="choice-btn" data-choice="C">C. Neither manager is right, because technology has almost no role in Zara’s business model</button>
+          <button class="choice-btn" data-choice="D">D. The second manager is right, because Zara’s systems matter most because they align with its fast-response strategy</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c5q3" data-correct="A">
+        <h3>3. Zara gathers information from stores about what customers are buying and asking for, then shares that information across the firm so production and design decisions can change quickly.</h3>
+        <p><strong>What is the BEST name for the information flowing from the stores in this scenario?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Demand signals, because the data show what customers currently want</button>
+          <button class="choice-btn" data-choice="B">B. Barriers to entry, because the data prevent rivals from joining the market</button>
+          <button class="choice-btn" data-choice="C">C. Substitutes, because the information replaces clothing items</button>
+          <button class="choice-btn" data-choice="D">D. Customer power, because the information is the same as negotiating leverage</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c5q4" data-correct="C">
+        <h3>4. A retailer uses RFID tags to track items and quickly check which products are available, missing, or moving through the store. This helps employees find merchandise and improve inventory visibility.</h3>
+        <p><strong>Which answer BEST explains why RFID supports Zara’s business model?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. RFID replaces the need for all logistics and inventory management</button>
+          <button class="choice-btn" data-choice="B">B. RFID mainly matters because it increases customer bargaining power</button>
+          <button class="choice-btn" data-choice="C">C. RFID improves tracking and visibility, which helps Zara react faster and reduce errors in a speed-based system</button>
+          <button class="choice-btn" data-choice="D">D. RFID is useful only because it turns Zara into a software company</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c5q5" data-correct="B">
+        <h3>5. Customers often buy Zara items immediately because they believe the item may not be there later and may not come back in the same form. This behavior reduces waiting and helps products sell at full price.</h3>
+        <p><strong>Which concept BEST explains this customer behavior?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Installed base, because more users make the product more valuable</button>
+          <button class="choice-btn" data-choice="B">B. Scarcity effect, because customers feel urgency when they think an item may sell out</button>
+          <button class="choice-btn" data-choice="C">C. Supplier power, because manufacturers are controlling customer choices</button>
+          <button class="choice-btn" data-choice="D">D. Winner-take-all dynamics, because only one fashion retailer can survive</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <footer>
+      MIS 301 Extra Credit Study Guide • Chapter 5
+    </footer>
+  </div>
+
+  <script>
+    const feedbackMap = {
+      c5q1: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because Zara’s advantage is not mainly based on having the absolute lowest unit manufacturing cost. The chapter emphasizes speed and responsiveness instead.',
+          B: 'B is correct because the second retailer can respond faster to changing demand through tighter control, smaller batches, and shorter cycle times. That is the core of Zara’s model.',
+          C: 'C is incorrect because every retailer still has a supply chain. The advantage comes from managing it differently, not from eliminating it.',
+          D: 'D is incorrect because no retailer is guaranteed to eliminate rivalry. The issue here is operational responsiveness, not total removal of competition.'
+        }
+      },
+      c5q2: {
+        correct: 'D',
+        rationale: {
+          A: 'A is incorrect because the chapter explicitly argues that Zara does not win by spending the most on technology. Technology spending alone is not the source of its edge.',
+          B: 'B is incorrect because Zara’s success is not mainly about owning special hardware. It is about how its systems support its business model.',
+          C: 'C is incorrect because technology clearly does matter for Zara. The point is that its value comes from alignment with strategy, not from being flashy or expensive.',
+          D: 'D is correct because Zara’s systems matter most because they are tied directly to its fast-response strategy, logistics, and operations. That alignment is the real advantage.'
+        }
+      },
+      c5q3: {
+        correct: 'A',
+        rationale: {
+          A: 'A is correct because sales information and customer requests from stores are demand signals that help Zara understand what the market wants right now.',
+          B: 'B is incorrect because barriers to entry are obstacles that prevent new firms from entering an industry, not information gathered from stores.',
+          C: 'C is incorrect because substitutes are alternative products or services, not the flow of market information inside the company.',
+          D: 'D is incorrect because customer power is about negotiating leverage, while the scenario is about information used for rapid response.'
+        }
+      },
+      c5q4: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because RFID does not eliminate the need for logistics or inventory management. It improves them.',
+          B: 'B is incorrect because RFID is not primarily about bargaining power. Its value in this chapter is operational visibility and speed.',
+          C: 'C is correct because RFID helps track items more accurately and quickly, supporting Zara’s speed-based system by improving inventory visibility and reducing errors.',
+          D: 'D is incorrect because using RFID does not turn Zara into a software company. It is simply a tool that supports Zara’s retail and logistics model.'
+        }
+      },
+      c5q5: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because installed base is a platform term about the number of users already on a system. It does not explain the urgency to buy a fashion item now.',
+          B: 'B is correct because the scarcity effect makes customers feel pressure to buy quickly when they think an item may sell out or disappear soon.',
+          C: 'C is incorrect because supplier power is not the main issue. The scenario is about customer perception and urgency, not supplier leverage.',
+          D: 'D is incorrect because winner-take-all dynamics describe certain platform markets, not the urgency customers feel in Zara’s stores.'
+        }
+      }
+    };
+
+    function buildFullExplanation(qid) {
+      const letters = ['A', 'B', 'C', 'D'];
+      const items = letters.map(letter => `<li><strong>${letter}.</strong> ${feedbackMap[qid].rationale[letter]}</li>`).join('');
+      return `<div style="margin-top:10px;"><strong>Answer review for all choices:</strong></div><ul style="margin-top:10px; padding-left:20px;">${items}</ul>`;
+    }
+
+    document.querySelectorAll('.question').forEach((questionEl) => {
+      const qid = questionEl.dataset.qid;
+      const buttons = questionEl.querySelectorAll('.choice-btn');
+      const feedback = questionEl.querySelector('.feedback');
+      const correct = questionEl.dataset.correct;
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.dataset.choice;
+
+          buttons.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('correct-choice', 'incorrect-choice');
+            if (b.dataset.choice === correct) b.classList.add('correct-choice');
+            if (b.dataset.choice === selected && selected !== correct) b.classList.add('incorrect-choice');
+          });
+
+          const fullExplanation = buildFullExplanation(qid);
+
+          if (selected === correct) {
+            feedback.className = 'feedback show correct';
+            feedback.innerHTML = `<strong>Correct.</strong> You chose the right answer. ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          } else {
+            feedback.className = 'feedback show incorrect';
+            feedback.innerHTML = `<strong>Incorrect.</strong> You chose ${selected}, but the correct answer is ${correct}. ${feedbackMap[qid].rationale[selected]} ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
