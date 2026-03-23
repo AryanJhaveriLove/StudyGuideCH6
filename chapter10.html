@@ -1,1 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 10 Study Guide</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #bf5700;
+      --accent-dark: #8f3f00;
+      --border: #e5e7eb;
+      --success: #166534;
+      --error: #991b1b;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-inner {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: var(--accent-dark);
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.4rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 8px 0;
+      font-size: 1.05rem;
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .card h2, .section-title {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .term {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .term:first-of-type,
+    .question:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .term h3,
+    .question h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .question {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #d1d5db;
+    }
+
+    .choice-btn.correct-choice {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .choice-btn.incorrect-choice {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.correct {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 28px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 1.9rem; }
+      .container { padding: 20px 14px 40px; }
+      .hero, .section, .card { padding: 20px; }
+      .nav-inner { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="brand">MIS 301 Study Guides</span>
+      <a href="index.html">Home</a>
+      <a href="chapter1.html">Chapter 1</a>
+      <a href="chapter6.html">Chapter 6</a>
+      <a href="chapter7.html">Chapter 7</a>
+      <a href="chapter8.html">Chapter 8</a>
+      <a href="chapter9.html">Chapter 9</a>
+      <a href="chapter10.html">Chapter 10</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Chapter 10 Study Guide</h1>
+      <p><strong>Software Development:</strong> Tradeoffs and Total Costs</p>
+      <p>This chapter explains how managers participate in software projects, why requirements matter so much, and how software decisions involve tradeoffs in time, cost, scope, and organizational impact.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>What to Know</h2>
+        <p class="muted">This chapter is about software project management, requirements, tradeoffs, and the fact that software projects are really business projects with an IT component.</p>
+      </div>
+      <div class="card">
+        <h2>Main Theme</h2>
+        <p class="muted">Successful software development depends less on coding alone and more on understanding business needs, defining clear requirements, and managing tradeoffs realistically.</p>
+      </div>
+      <div class="card">
+        <h2>Manager Takeaway</h2>
+        <p class="muted">The manager’s most important role is taking responsibility for requirements and making sure the software project solves the right business problem.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Vocabulary</h2>
+
+      <div class="term">
+        <h3>Requirements</h3>
+        <p><span class="label">Definition:</span> Requirements are the specific things a system must do or support in order to meet business needs.</p>
+        <p><span class="label">Why it matters:</span> The slides emphasize that taking responsibility for requirements is the single most important task for future managers and users.</p>
+        <p><span class="label">Example:</span> A payroll system requirement might be that the system calculate taxes correctly under local law.</p>
+      </div>
+
+      <div class="term">
+        <h3>Scope</h3>
+        <p><span class="label">Definition:</span> Scope is the set of features, tasks, and deliverables included in a project.</p>
+        <p><span class="label">Why it matters:</span> Expanding scope usually increases cost, time, and complexity.</p>
+        <p><span class="label">Example:</span> Adding a mobile app, dashboard, and reporting module expands project scope.</p>
+      </div>
+
+      <div class="term">
+        <h3>Tradeoff</h3>
+        <p><span class="label">Definition:</span> A tradeoff is the need to give up one benefit in order to gain another.</p>
+        <p><span class="label">Why it matters:</span> Software projects constantly require tradeoffs among cost, features, speed, and quality.</p>
+        <p><span class="label">Example:</span> Releasing faster may mean delivering fewer features at first.</p>
+      </div>
+
+      <div class="term">
+        <h3>Total Cost of Ownership (TCO)</h3>
+        <p><span class="label">Definition:</span> Total cost of ownership is the full cost of a system over its life, including purchase, implementation, training, support, upgrades, and maintenance.</p>
+        <p><span class="label">Why it matters:</span> The real cost of software is usually much larger than the initial purchase price.</p>
+        <p><span class="label">Example:</span> Buying software may be cheaper than expected upfront, but training and maintenance can make total costs much higher later.</p>
+      </div>
+
+      <div class="term">
+        <h3>Software Project Management</h3>
+        <p><span class="label">Definition:</span> Software project management is the planning, coordination, and oversight of a software initiative from requirements through delivery.</p>
+        <p><span class="label">Why it matters:</span> Good project management keeps the system aligned with business needs and helps control cost and time.</p>
+        <p><span class="label">Example:</span> Setting milestones, tracking risks, and coordinating users and developers are project management activities.</p>
+      </div>
+
+      <div class="term">
+        <h3>Business Project with an IT Component</h3>
+        <p><span class="label">Definition:</span> This idea means software projects should be viewed primarily as business projects that involve technology, not as isolated technical exercises.</p>
+        <p><span class="label">Why it matters:</span> The slides stress that managers must focus on business outcomes, not just technical implementation.</p>
+        <p><span class="label">Example:</span> An ERP implementation is not just an IT task; it changes operations, reporting, and employee workflows.</p>
+      </div>
+
+      <div class="term">
+        <h3>Stakeholder</h3>
+        <p><span class="label">Definition:</span> A stakeholder is any person or group affected by the project or able to influence it.</p>
+        <p><span class="label">Why it matters:</span> Different stakeholders often have different priorities, which makes requirement gathering and project decisions harder.</p>
+        <p><span class="label">Example:</span> End users, executives, IT staff, and outside vendors can all be stakeholders.</p>
+      </div>
+
+      <div class="term">
+        <h3>Scope Creep</h3>
+        <p><span class="label">Definition:</span> Scope creep is the gradual, often uncontrolled expansion of project scope after work has already begun.</p>
+        <p><span class="label">Why it matters:</span> Scope creep can cause delays, higher costs, and project failure.</p>
+        <p><span class="label">Example:</span> A team agrees to build a basic sales dashboard, then keeps adding analytics, mobile access, and custom reports without adjusting the timeline.</p>
+      </div>
+
+      <div class="term">
+        <h3>Waterfall</h3>
+        <p><span class="label">Definition:</span> Waterfall is a linear development approach where stages such as planning, design, coding, testing, and deployment happen in sequence.</p>
+        <p><span class="label">Why it matters:</span> Waterfall can work when requirements are stable, but it is less flexible when requirements change.</p>
+        <p><span class="label">Example:</span> A project that finishes all planning before any coding begins is using a waterfall-style approach.</p>
+      </div>
+
+      <div class="term">
+        <h3>Agile</h3>
+        <p><span class="label">Definition:</span> Agile is an iterative development approach that delivers work in smaller pieces and adapts as requirements become clearer.</p>
+        <p><span class="label">Why it matters:</span> Agile can help teams respond to changing needs, but it still requires clear priorities and stakeholder involvement.</p>
+        <p><span class="label">Example:</span> A team releasing new features in short cycles and adjusting based on feedback is using agile methods.</p>
+      </div>
+
+      <div class="term">
+        <h3>Implementation</h3>
+        <p><span class="label">Definition:</span> Implementation is the process of putting a system into use within the organization.</p>
+        <p><span class="label">Why it matters:</span> Even good software can fail if implementation is poorly managed.</p>
+        <p><span class="label">Example:</span> Training users, migrating data, and switching from an old system to a new one are implementation tasks.</p>
+      </div>
+
+      <div class="term">
+        <h3>Change Management</h3>
+        <p><span class="label">Definition:</span> Change management is the process of helping people adapt to new systems, workflows, and expectations.</p>
+        <p><span class="label">Why it matters:</span> Software projects often fail because people resist change or do not understand the new process.</p>
+        <p><span class="label">Example:</span> Training employees and explaining why a new workflow exists are parts of change management.</p>
+      </div>
+
+      <div class="term">
+        <h3>Risk</h3>
+        <p><span class="label">Definition:</span> Risk is the possibility that something will go wrong and affect the project’s success.</p>
+        <p><span class="label">Why it matters:</span> Managers must identify and manage risks early rather than reacting after problems grow.</p>
+        <p><span class="label">Example:</span> A key vendor missing deadlines or users rejecting the system are project risks.</p>
+      </div>
+
+      <div class="term">
+        <h3>Customization</h3>
+        <p><span class="label">Definition:</span> Customization is modifying software to fit a firm’s specific needs.</p>
+        <p><span class="label">Why it matters:</span> Customization can improve fit, but it also increases cost, complexity, and future maintenance burdens.</p>
+        <p><span class="label">Example:</span> Changing an ERP system’s workflow to match a company’s unique approval process is customization.</p>
+      </div>
+
+      <div class="term">
+        <h3>User Acceptance</h3>
+        <p><span class="label">Definition:</span> User acceptance is the willingness of intended users to adopt and effectively use a new system.</p>
+        <p><span class="label">Why it matters:</span> A technically successful project still fails if users reject it.</p>
+        <p><span class="label">Example:</span> Employees refusing to use a new CRM system means user acceptance is low.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Key Concepts</h2>
+      <ul>
+        <li>Software projects should be treated as business projects, not just technical projects.</li>
+        <li>Clear requirements are the foundation of good software development and implementation.</li>
+        <li>Managers must balance time, cost, scope, and quality through tradeoffs.</li>
+        <li>Total cost of ownership includes much more than the purchase price of software.</li>
+        <li>Implementation and change management are as important as coding and design.</li>
+        <li>Customization can improve fit, but it also raises complexity and long-term cost.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Interactive Practice Quiz</h2>
+
+      <div class="question" data-qid="c10q1" data-correct="B">
+        <h3>1. A manager tells the project team, “This is an IT project, so the programmers should decide what the system needs.” Another manager replies that the project should be treated primarily as a business project, and that users and managers must take responsibility for defining what the software must do.</h3>
+        <p><strong>Which response BEST matches Chapter 10?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The first manager is right, because only programmers understand software well enough to define requirements</button>
+          <button class="choice-btn" data-choice="B">B. The second manager is right, because software projects are business projects with an IT component and requirements must reflect business needs</button>
+          <button class="choice-btn" data-choice="C">C. Both managers are equally right, because requirements do not matter much once coding begins</button>
+          <button class="choice-btn" data-choice="D">D. Neither manager is right, because software projects succeed mainly through vendor selection</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c10q2" data-correct="D">
+        <h3>2. A firm buys a new software system at what seems like a low price. Months later, it discovers that training, integration, customization, support, and future upgrades cost far more than expected.</h3>
+        <p><strong>Which concept BEST explains why the true cost was underestimated?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Installed base, because the software already had many users</button>
+          <button class="choice-btn" data-choice="B">B. Scope creep, because every project always expands automatically</button>
+          <button class="choice-btn" data-choice="C">C. Price elasticity, because lower prices always increase demand</button>
+          <button class="choice-btn" data-choice="D">D. Total cost of ownership, because the full cost of software includes more than the initial purchase</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c10q3" data-correct="A">
+        <h3>3. A project begins with a basic dashboard request, but after work starts, managers keep asking for additional analytics, mobile features, automated alerts, and custom reports without changing the timeline or budget.</h3>
+        <p><strong>What is the BEST label for this problem?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Scope creep, because the project’s features are expanding without proper control</button>
+          <button class="choice-btn" data-choice="B">B. Vendor lock-in, because the firm cannot switch providers</button>
+          <button class="choice-btn" data-choice="C">C. Vertical integration, because the firm is controlling more of its supply chain</button>
+          <button class="choice-btn" data-choice="D">D. Data mining, because the team is finding new patterns in the data</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c10q4" data-correct="C">
+        <h3>4. A company implements a technically sound new system, but many employees resist using it because they were not trained well and do not understand why the change was made. The software itself works, yet adoption is low.</h3>
+        <p><strong>Which answer BEST explains why the project is still struggling?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The firm needed more hardware, because software adoption always depends on faster devices</button>
+          <button class="choice-btn" data-choice="B">B. The project failed because all software projects require open source code</button>
+          <button class="choice-btn" data-choice="C">C. Implementation and change management matter, because people must understand and accept the new system</button>
+          <button class="choice-btn" data-choice="D">D. User acceptance does not matter once the technical team finishes the build</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c10q5" data-correct="B">
+        <h3>5. A firm is deciding whether to heavily customize an ERP system so it matches all current internal processes exactly. One executive likes the fit, but another warns that every custom feature could make the system more expensive to maintain and upgrade later.</h3>
+        <p><strong>Which response BEST reflects Chapter 10?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Customization is always the best choice, because matching current processes perfectly eliminates all project risk</button>
+          <button class="choice-btn" data-choice="B">B. Customization may improve fit, but it also raises complexity, cost, and long-term maintenance burdens</button>
+          <button class="choice-btn" data-choice="C">C. Customization only matters in hardware projects, not software projects</button>
+          <button class="choice-btn" data-choice="D">D. Customization eliminates the need for requirements because the system can be changed later</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <footer>
+      MIS 301 Extra Credit Study Guide • Chapter 10
+    </footer>
+  </div>
+
+  <script>
+    const feedbackMap = {
+      c10q1: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because programmers may understand code, but requirements must come from business needs and user realities, not just technical judgment.',
+          B: 'B is correct because the slides explicitly say there are no pure IT projects, only business projects with an IT component. That is why requirements ownership by managers and users matters so much.',
+          C: 'C is incorrect because requirements matter enormously from the start. Weak requirements often cause software projects to solve the wrong problem.',
+          D: 'D is incorrect because vendor choice matters, but it is not the main lesson of the chapter. The chapter focuses on business needs, requirements, and project tradeoffs.'
+        }
+      },
+      c10q2: {
+        correct: 'D',
+        rationale: {
+          A: 'A is incorrect because installed base refers to existing users of a product or platform, not the hidden cost of owning software over time.',
+          B: 'B is incorrect because the scenario is about underestimating total cost, not uncontrolled growth in project features.',
+          C: 'C is incorrect because price elasticity concerns how demand responds to price changes. It does not explain hidden ownership costs.',
+          D: 'D is correct because total cost of ownership includes training, customization, integration, support, and maintenance in addition to the initial purchase price.'
+        }
+      },
+      c10q3: {
+        correct: 'A',
+        rationale: {
+          A: 'A is correct because scope creep happens when additional features and requests keep getting added without proper control, often leading to delays and cost overruns.',
+          B: 'B is incorrect because vendor lock-in is about being stuck with a provider, not about uncontrolled expansion of project features.',
+          C: 'C is incorrect because vertical integration concerns controlling more of the supply chain, which is unrelated to this software project issue.',
+          D: 'D is incorrect because data mining is about finding patterns in data, not about expanding project requirements.'
+        }
+      },
+      c10q4: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because the scenario is about adoption and human resistance, not a lack of computing power.',
+          B: 'B is incorrect because open source is not the issue. The problem is that people were not prepared to use or accept the system.',
+          C: 'C is correct because Chapter 10 stresses that implementation and change management matter. A technically sound system can still struggle if users are not trained and do not accept the change.',
+          D: 'D is incorrect because user acceptance absolutely matters. If users reject the system, the project does not succeed in practice.'
+        }
+      },
+      c10q5: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because customization does not eliminate all project risk. It often adds complexity and future support challenges.',
+          B: 'B is correct because customization can improve fit, but it also increases maintenance burden, cost, and upgrade difficulty over time.',
+          C: 'C is incorrect because customization is a major issue in software projects, especially ERP and enterprise implementations.',
+          D: 'D is incorrect because requirements are still essential. The idea that everything can just be changed later is one reason projects spiral out of control.'
+        }
+      }
+    };
+
+    function buildFullExplanation(qid) {
+      const letters = ['A', 'B', 'C', 'D'];
+      const items = letters.map(letter => `<li><strong>${letter}.</strong> ${feedbackMap[qid].rationale[letter]}</li>`).join('');
+      return `<div style="margin-top:10px;"><strong>Answer review for all choices:</strong></div><ul style="margin-top:10px; padding-left:20px;">${items}</ul>`;
+    }
+
+    document.querySelectorAll('.question').forEach((questionEl) => {
+      const qid = questionEl.dataset.qid;
+      const buttons = questionEl.querySelectorAll('.choice-btn');
+      const feedback = questionEl.querySelector('.feedback');
+      const correct = questionEl.dataset.correct;
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.dataset.choice;
+
+          buttons.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('correct-choice', 'incorrect-choice');
+            if (b.dataset.choice === correct) b.classList.add('correct-choice');
+            if (b.dataset.choice === selected && selected !== correct) b.classList.add('incorrect-choice');
+          });
+
+          const fullExplanation = buildFullExplanation(qid);
+
+          if (selected === correct) {
+            feedback.className = 'feedback show correct';
+            feedback.innerHTML = `<strong>Correct.</strong> You chose the right answer. ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          } else {
+            feedback.className = 'feedback show incorrect';
+            feedback.innerHTML = `<strong>Incorrect.</strong> You chose ${selected}, but the correct answer is ${correct}. ${feedbackMap[qid].rationale[selected]} ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
