@@ -1,1 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 7 Study Guide</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #bf5700;
+      --accent-dark: #8f3f00;
+      --border: #e5e7eb;
+      --success: #166534;
+      --error: #991b1b;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-inner {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: var(--accent-dark);
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.4rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 8px 0;
+      font-size: 1.05rem;
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .card h2, .section-title {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .term {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .term:first-of-type,
+    .question:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .term h3,
+    .question h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .question {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #d1d5db;
+    }
+
+    .choice-btn.correct-choice {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .choice-btn.incorrect-choice {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.correct {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 28px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 1.9rem; }
+      .container { padding: 20px 14px 40px; }
+      .hero, .section, .card { padding: 20px; }
+      .nav-inner { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="brand">MIS 301 Study Guides</span>
+      <a href="index.html">Home</a>
+      <a href="chapter1.html">Chapter 1</a>
+      <a href="chapter2.html">Chapter 2</a>
+      <a href="chapter3.html">Chapter 3</a>
+      <a href="chapter4.html">Chapter 4</a>
+      <a href="chapter5.html">Chapter 5</a>
+      <a href="chapter6.html">Chapter 6</a>
+      <a href="chapter7.html">Chapter 7</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Chapter 7 Study Guide</h1>
+      <p><strong>Understanding Software:</strong> A Primer for Managers</p>
+      <p>This chapter explains how managers should classify software, understand software layers, and connect software choices to lock-in, compatibility, usability, and business value.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>What to Know</h2>
+        <p class="muted">This chapter is about the basic categories of software, where software runs, who can modify it, and how software layers create dependency across an ecosystem.</p>
+      </div>
+      <div class="card">
+        <h2>Main Theme</h2>
+        <p class="muted">Managers do not need to be programmers, but they do need to understand what kind of software they are using and how software choices affect flexibility, compatibility, and lock-in.</p>
+      </div>
+      <div class="card">
+        <h2>Manager Takeaway</h2>
+        <p class="muted">Good managers ask four questions about software: what it does, who can change the source code, where it runs, and what standards it uses.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Vocabulary</h2>
+
+      <div class="term">
+        <h3>Software</h3>
+        <p><span class="label">Definition:</span> Software is a set of instructions that tells hardware what to do.</p>
+        <p><span class="label">Why it matters:</span> Managers constantly make decisions about software even when they never write code themselves.</p>
+        <p><span class="label">Example:</span> Excel, Windows, Salesforce, and Google Docs are all software, but they serve different roles.</p>
+      </div>
+
+      <div class="term">
+        <h3>Operating System (OS)</h3>
+        <p><span class="label">Definition:</span> An operating system is the core software layer that manages hardware resources and supports other software.</p>
+        <p><span class="label">Why it matters:</span> The operating system affects which applications can run and how users interact with the device.</p>
+        <p><span class="label">Example:</span> Windows, macOS, Linux, and iOS are operating systems.</p>
+      </div>
+
+      <div class="term">
+        <h3>Database Management System (DBMS)</h3>
+        <p><span class="label">Definition:</span> A DBMS is software used to store, organize, retrieve, and manage structured data.</p>
+        <p><span class="label">Why it matters:</span> Many business applications rely on databases to store and manage critical information.</p>
+        <p><span class="label">Example:</span> Oracle Database and MySQL are DBMS examples.</p>
+      </div>
+
+      <div class="term">
+        <h3>User Application</h3>
+        <p><span class="label">Definition:</span> A user application is software designed to help end users perform specific tasks.</p>
+        <p><span class="label">Why it matters:</span> This is the software employees and customers interact with directly, so it strongly affects productivity and user experience.</p>
+        <p><span class="label">Example:</span> Excel, Photoshop, and Google Sheets are user applications.</p>
+      </div>
+
+      <div class="term">
+        <h3>Closed Source (Proprietary) Software</h3>
+        <p><span class="label">Definition:</span> Closed source software is software whose source code can be changed only by the company or organization that owns it.</p>
+        <p><span class="label">Why it matters:</span> Proprietary software gives the owner more control, but it can increase dependence on the vendor.</p>
+        <p><span class="label">Example:</span> Microsoft Excel is proprietary software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Open Source Software</h3>
+        <p><span class="label">Definition:</span> Open source software is software whose source code is available for others to inspect, modify, and redistribute.</p>
+        <p><span class="label">Why it matters:</span> Open source can increase flexibility and reduce reliance on a single vendor.</p>
+        <p><span class="label">Example:</span> Linux is open source software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Local Software</h3>
+        <p><span class="label">Definition:</span> Local software runs on the user’s own device and does not require network access to perform its core functions.</p>
+        <p><span class="label">Why it matters:</span> Local software can work offline and may feel faster, but it is often harder to update and coordinate across many users.</p>
+        <p><span class="label">Example:</span> A desktop version of Excel installed on a laptop is local software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Hosted Software</h3>
+        <p><span class="label">Definition:</span> Hosted software runs on a remote server and is accessed through a browser or client rather than running primarily on the user’s device.</p>
+        <p><span class="label">Why it matters:</span> Hosted software can simplify collaboration and updates, but it depends on networks and service providers.</p>
+        <p><span class="label">Example:</span> Google Sheets is hosted software.</p>
+      </div>
+
+      <div class="term">
+        <h3>Open Standard</h3>
+        <p><span class="label">Definition:</span> An open standard allows other firms to build compatible products or complementary software without needing special permission from the owner.</p>
+        <p><span class="label">Why it matters:</span> Open standards can help ecosystems grow by making compatibility easier.</p>
+        <p><span class="label">Example:</span> A broadly compatible file format or platform interface encourages more complementary products.</p>
+      </div>
+
+      <div class="term">
+        <h3>Closed Standard</h3>
+        <p><span class="label">Definition:</span> A closed standard requires permission from the owner before other firms can build compatible products or complementary offerings.</p>
+        <p><span class="label">Why it matters:</span> Closed standards give tighter control, but can reduce ecosystem openness and outside participation.</p>
+        <p><span class="label">Example:</span> A tightly controlled device ecosystem with limited outside compatibility reflects a closed standard approach.</p>
+      </div>
+
+      <div class="term">
+        <h3>Konana’s Ecosystem Model</h3>
+        <p><span class="label">Definition:</span> Konana’s Ecosystem Model shows how computing exists in layered dependencies, from hardware up through operating systems, databases, middleware, and applications.</p>
+        <p><span class="label">Why it matters:</span> Because each layer depends on the ones below it, one software choice can influence many later choices and create lock-in across the stack.</p>
+        <p><span class="label">Example:</span> Choosing one operating system affects which applications and tools a firm can easily use.</p>
+      </div>
+
+      <div class="term">
+        <h3>Lock-In</h3>
+        <p><span class="label">Definition:</span> Lock-in occurs when a user or firm becomes dependent on a product or ecosystem and faces difficulty or cost when trying to switch away.</p>
+        <p><span class="label">Why it matters:</span> Software ecosystems can trap users through compatibility, training, files, and complementary products.</p>
+        <p><span class="label">Example:</span> A company deeply invested in one software stack may find switching expensive and disruptive.</p>
+      </div>
+
+      <div class="term">
+        <h3>Graphical User Interface (GUI)</h3>
+        <p><span class="label">Definition:</span> A graphical user interface is a visual interface that lets users interact with software through icons, menus, windows, buttons, and other on-screen controls instead of only typed commands.</p>
+        <p><span class="label">Why it matters:</span> GUIs made computers much easier for non-programmers to use.</p>
+        <p><span class="label">Example:</span> Drop-down menus, check boxes, and desktop icons are GUI elements.</p>
+      </div>
+
+      <div class="term">
+        <h3>Command Line</h3>
+        <p><span class="label">Definition:</span> The command line is a text-based interface where users type instructions directly to the computer.</p>
+        <p><span class="label">Why it matters:</span> Before GUIs became common, many computer tasks required command-line knowledge, which made computing less accessible to average users.</p>
+        <p><span class="label">Example:</span> Typing a command into Terminal on a Mac or Command Prompt on Windows uses the command line.</p>
+      </div>
+
+      <div class="term">
+        <h3>Enterprise Software</h3>
+        <p><span class="label">Definition:</span> Enterprise software is software designed to support the operations, coordination, or decision-making needs of an organization.</p>
+        <p><span class="label">Why it matters:</span> Managers often choose enterprise software to support large-scale business processes rather than only individual tasks.</p>
+        <p><span class="label">Example:</span> ERP, CRM, and business intelligence systems are enterprise software categories.</p>
+      </div>
+
+      <div class="term">
+        <h3>ERP (Enterprise Resource Planning)</h3>
+        <p><span class="label">Definition:</span> ERP is integrated software that connects multiple business functions, such as accounting, inventory, operations, and HR, into a shared system.</p>
+        <p><span class="label">Why it matters:</span> ERP can improve coordination across the business, but it also affects many processes at once.</p>
+        <p><span class="label">Example:</span> A company using one system to manage orders, payroll, and inventory is using ERP.</p>
+      </div>
+
+      <div class="term">
+        <h3>CRM, SCM, and BI Systems</h3>
+        <p><span class="label">Definition:</span> CRM systems manage customer relationships, SCM systems support supply chain operations, and BI systems analyze data to support managerial decisions.</p>
+        <p><span class="label">Why it matters:</span> Managers should understand that different software categories solve different business problems.</p>
+        <p><span class="label">Example:</span> Salesforce is a CRM example, while a reporting dashboard for executives is a BI example.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Key Concepts</h2>
+      <ul>
+        <li>Managers can classify software by asking what it does, who can change the code, where it runs, and what standards it uses.</li>
+        <li>Software exists in layers, and lower-layer choices can shape higher-layer options.</li>
+        <li>Open versus closed approaches affect control, compatibility, and ecosystem growth.</li>
+        <li>Local versus hosted software changes convenience, collaboration, and dependence on networks.</li>
+        <li>GUIs made computing far more accessible to non-programmers.</li>
+        <li>Enterprise software matters because it supports large-scale business processes, not just individual productivity.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Interactive Practice Quiz</h2>
+
+      <div class="question" data-qid="c7q1" data-correct="C">
+        <h3>1. A retail manager is comparing two spreadsheet tools for her team. One runs in a browser, updates automatically, and lets employees collaborate from different locations. The other is installed on each laptop and works even without internet access. She wants to classify the browser-based tool correctly before recommending it.</h3>
+        <p><strong>Which description BEST classifies the browser-based tool?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. It is local software because employees still use it on their own computers</button>
+          <button class="choice-btn" data-choice="B">B. It is an operating system because it helps users complete work</button>
+          <button class="choice-btn" data-choice="C">C. It is hosted software because the code runs on a remote server and users access it through a browser or client</button>
+          <button class="choice-btn" data-choice="D">D. It is a closed standard because it requires a login</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c7q2" data-correct="A">
+        <h3>2. A manager is trying to explain why choosing an operating system matters even if employees mostly care about the apps they use every day. She points out that one software decision can affect which applications are available, how easily systems connect, and how difficult it is to switch later.</h3>
+        <p><strong>Which idea from Konana’s Ecosystem Model BEST supports her explanation?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Software layers depend on the layers beneath them, so one choice can create lock-in across the stack</button>
+          <button class="choice-btn" data-choice="B">B. The best software choice is always the cheapest one available</button>
+          <button class="choice-btn" data-choice="C">C. User applications are more important than every other software layer combined</button>
+          <button class="choice-btn" data-choice="D">D. Hardware decisions do not affect software compatibility in meaningful ways</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c7q3" data-correct="D">
+        <h3>3. A company is deciding between a proprietary software product and an open source alternative. One executive says proprietary software means the vendor keeps control of the code, while another says open source means anyone can inspect and modify the source code. A third executive confuses open source with free-to-use software.</h3>
+        <p><strong>Which statement is MOST accurate?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Open source means the software must always be free of charge for every possible use</button>
+          <button class="choice-btn" data-choice="B">B. Proprietary software is always hosted, while open source software is always local</button>
+          <button class="choice-btn" data-choice="C">C. Open source and open standards mean exactly the same thing in every context</button>
+          <button class="choice-btn" data-choice="D">D. Proprietary software limits who can modify the source code, while open source software makes the code available for inspection and modification</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c7q4" data-correct="B">
+        <h3>4. An older executive remembers when many computer tasks required typed commands and special training. She is amazed that new employees can quickly navigate software using menus, check boxes, icons, and buttons. She asks why this change mattered so much for business adoption of software.</h3>
+        <p><strong>What is the BEST answer?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. It reduced the need for hardware and eliminated the operating system layer</button>
+          <button class="choice-btn" data-choice="B">B. It made computing easier for non-programmers by replacing pure command-line interaction with visual controls</button>
+          <button class="choice-btn" data-choice="C">C. It turned all software into enterprise software used only by large firms</button>
+          <button class="choice-btn" data-choice="D">D. It guaranteed that all applications would work across every operating system</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c7q5" data-correct="C">
+        <h3>5. A business is evaluating an ERP system and asks which departments could be affected by the implementation. One manager assumes ERP is just accounting software, while another says it can influence many connected processes across the firm.</h3>
+        <p><strong>Which response BEST reflects the chapter?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. ERP mainly affects only payroll, so other departments usually see no changes</button>
+          <button class="choice-btn" data-choice="B">B. ERP is basically the same thing as a graphical user interface</button>
+          <button class="choice-btn" data-choice="C">C. ERP can affect multiple functions such as accounting, inventory, operations, HR, and coordination across departments</button>
+          <button class="choice-btn" data-choice="D">D. ERP matters only when a company is choosing between open source and proprietary software</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <footer>
+      MIS 301 Extra Credit Study Guide • Chapter 7
+    </footer>
+  </div>
+
+  <script>
+    const feedbackMap = {
+      c7q1: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because software being used on a person’s computer does not automatically make it local. The key distinction is where the code runs.',
+          B: 'B is incorrect because an operating system manages hardware and supports other software. A browser-based spreadsheet tool is a user application, not an operating system.',
+          C: 'C is correct because hosted software runs on a remote server and is accessed through a browser or client. Collaboration and automatic updates are classic signs of hosted software.',
+          D: 'D is incorrect because needing a login does not define a closed standard. Standards are about compatibility and permission for complements, not authentication.'
+        }
+      },
+      c7q2: {
+        correct: 'A',
+        rationale: {
+          A: 'A is correct because Konana’s Ecosystem Model emphasizes layered dependency. Choices at lower layers such as the operating system can affect which applications and tools are available later.',
+          B: 'B is incorrect because the model is not about always choosing the cheapest software. It is about understanding dependency across layers.',
+          C: 'C is incorrect because user applications matter, but they depend on lower layers like the operating system and hardware.',
+          D: 'D is incorrect because hardware and operating system choices can strongly affect compatibility and later software options.'
+        }
+      },
+      c7q3: {
+        correct: 'D',
+        rationale: {
+          A: 'A is incorrect because open source does not simply mean free of charge. It refers to the availability and modifiability of the source code.',
+          B: 'B is incorrect because proprietary versus open source is different from local versus hosted. A product can be open source and hosted or proprietary and local.',
+          C: 'C is incorrect because open source and open standards are related but not identical. One is about source code access, the other is about compatibility rules.',
+          D: 'D is correct because the core distinction is who can inspect and modify the code. Proprietary software restricts this, while open source makes the code available.'
+        }
+      },
+      c7q4: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because GUIs did not remove hardware or the operating system. They changed how users interact with software.',
+          B: 'B is correct because the GUI made computing easier for non-programmers by replacing command-line-only interaction with visual controls.',
+          C: 'C is incorrect because GUIs did not turn all software into enterprise software. They improved usability across many kinds of software.',
+          D: 'D is incorrect because GUIs do not guarantee cross-platform compatibility. Compatibility depends on design and standards.'
+        }
+      },
+      c7q5: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because ERP is not limited to payroll or one narrow function. It can affect many departments.',
+          B: 'B is incorrect because ERP is not an interface like a GUI. It is a category of integrated enterprise software.',
+          C: 'C is correct because ERP often connects accounting, inventory, operations, HR, and other processes into one system, so implementation can affect much of the organization.',
+          D: 'D is incorrect because ERP decisions involve much more than the open source versus proprietary question. The main point is broad cross-functional integration.'
+        }
+      }
+    };
+
+    function buildFullExplanation(qid) {
+      const letters = ['A', 'B', 'C', 'D'];
+      const items = letters.map(letter => `<li><strong>${letter}.</strong> ${feedbackMap[qid].rationale[letter]}</li>`).join('');
+      return `<div style="margin-top:10px;"><strong>Answer review for all choices:</strong></div><ul style="margin-top:10px; padding-left:20px;">${items}</ul>`;
+    }
+
+    document.querySelectorAll('.question').forEach((questionEl) => {
+      const qid = questionEl.dataset.qid;
+      const buttons = questionEl.querySelectorAll('.choice-btn');
+      const feedback = questionEl.querySelector('.feedback');
+      const correct = questionEl.dataset.correct;
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.dataset.choice;
+
+          buttons.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('correct-choice', 'incorrect-choice');
+            if (b.dataset.choice === correct) b.classList.add('correct-choice');
+            if (b.dataset.choice === selected && selected !== correct) b.classList.add('incorrect-choice');
+          });
+
+          const fullExplanation = buildFullExplanation(qid);
+
+          if (selected === correct) {
+            feedback.className = 'feedback show correct';
+            feedback.innerHTML = `<strong>Correct.</strong> You chose the right answer. ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          } else {
+            feedback.className = 'feedback show incorrect';
+            feedback.innerHTML = `<strong>Incorrect.</strong> You chose ${selected}, but the correct answer is ${correct}. ${feedbackMap[qid].rationale[selected]} ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
