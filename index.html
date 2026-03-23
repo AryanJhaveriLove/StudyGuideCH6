@@ -124,13 +124,69 @@
       margin-top: 0;
     }
 
-    .answer {
-      margin-top: 10px;
-      padding: 12px 14px;
+    .feedback {
+      margin-top: 14px;
+      padding: 14px 16px;
       border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.correct {
       background: #f0fdf4;
-      color: var(--success);
-      border: 1px solid #bbf7d0;
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #d1d5db;
+    }
+
+    .choice-btn.correct-choice {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .choice-btn.incorrect-choice {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 1;
     }
 
     footer {
@@ -242,55 +298,155 @@
     </section>
 
     <section class="section">
-      <h2 class="section-title">Practice Questions</h2>
+      <h2 class="section-title">Interactive Practice Quiz</h2>
 
-      <div class="question">
-        <h3>1. What does Moore's Law describe?</h3>
-        <p>A) The decline in software quality over time<br>
-        B) The doubling of computing power approximately every 18 to 24 months<br>
-        C) The increase in software prices<br>
-        D) The speed of internet connections</p>
-        <div class="answer"><strong>Answer:</strong> B<br><strong>Explanation:</strong> Moore's Law refers to the rapid increase in computing capability over time as transistor density increases.</div>
+      <div class="question" data-correct="B">
+        <h3>1. A student startup is building an AI note-taking app for UT students. Two years ago, the team could not afford enough computing power to run speech-to-text and summary tools at a useful level. Now, cloud computing prices have dropped, and the app can offer those features at a student-friendly price. The founders are debating whether this shift is mostly about better strategy, stronger branding, or a basic change in technology economics.</h3>
+        <p><strong>Which concept BEST explains why the startup can now offer advanced features to many more students?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Switching costs, because students will stay once they upload notes into the app</button>
+          <button class="choice-btn" data-choice="B">B. Price elasticity tied to falling computing costs, because cheaper computing makes new uses affordable</button>
+          <button class="choice-btn" data-choice="C">C. Vertical integration, because the startup now controls every part of the supply chain</button>
+          <button class="choice-btn" data-choice="D">D. Bargaining power of suppliers, because cloud providers now force students to adopt AI tools</button>
+        </div>
+        <div class="feedback"></div>
       </div>
 
-      <div class="question">
-        <h3>2. Why is demand for computing often highly elastic?</h3>
-        <p>A) Computing is always a luxury product<br>
-        B) Lower prices lead people to use more computing in new ways<br>
-        C) Demand for computing never changes<br>
-        D) Computing has no business applications</p>
-        <div class="answer"><strong>Answer:</strong> B<br><strong>Explanation:</strong> When computing gets cheaper, firms and consumers discover more uses for it, so demand rises strongly.</div>
+      <div class="question" data-correct="D">
+        <h3>2. A campus job board used to be slow and hard to search, so students ignored it. Over the last few years, faster hardware and cheaper storage let the university add filters, instant search, resume matching, and AI suggestions without charging students. One manager says the upgrade happened gradually, but another says the real lesson is that small technical improvements can add up and create much bigger business changes than people expect.</h3>
+        <p><strong>What is the MOST accurate reason managers often misjudge changes like this?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Managers usually assume demand for computing is perfectly fixed over time</button>
+          <button class="choice-btn" data-choice="B">B. Managers usually believe hardware improvements matter only to engineers and not to users</button>
+          <button class="choice-btn" data-choice="C">C. Managers usually focus only on app design and ignore whether customers like the product</button>
+          <button class="choice-btn" data-choice="D">D. Managers often think linearly, even when technology improves exponentially</button>
+        </div>
+        <div class="feedback"></div>
       </div>
 
-      <div class="question">
-        <h3>3. Which of the following is the best example of digital convergence?</h3>
-        <p>A) A faster processor chip<br>
-        B) A smartphone replacing multiple separate devices<br>
-        C) A company lowering software prices<br>
-        D) A manager buying new hardware</p>
-        <div class="answer"><strong>Answer:</strong> B<br><strong>Explanation:</strong> Digital convergence happens when many functions and technologies are combined into one device or platform.</div>
+      <div class="question" data-correct="A">
+        <h3>3. A student compares her phone to the devices her parents carried in college: a phone, camera, GPS, iPod, flashlight, and paper planner. She realizes one modern device now performs all of those roles well enough for daily use. A classmate argues that this is just an example of brand loyalty, but her professor says the better explanation is that cheaper and more powerful computing let many digital functions merge into one product.</h3>
+        <p><strong>Which concept BEST fits this scenario?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Digital convergence, because multiple technologies combine into a single device</button>
+          <button class="choice-btn" data-choice="B">B. Capital intensity, because smartphones require expensive factories to produce</button>
+          <button class="choice-btn" data-choice="C">C. Network effects, because more phone users directly increase the value of cameras</button>
+          <button class="choice-btn" data-choice="D">D. Switching costs, because users dislike learning new interfaces</button>
+        </div>
+        <div class="feedback"></div>
       </div>
 
-      <div class="question">
-        <h3>4. Why do managers often underestimate technological change?</h3>
-        <p>A) Technology always improves slowly<br>
-        B) Exponential growth is difficult to intuitively understand<br>
-        C) Technology trends are completely random<br>
-        D) Managers only care about software</p>
-        <div class="answer"><strong>Answer:</strong> B<br><strong>Explanation:</strong> People often think linearly, so they do not fully appreciate how quickly exponential growth can transform markets.</div>
+      <div class="question" data-correct="C">
+        <h3>4. A small tutoring company avoided using AI tools last year because the software was too expensive and too slow for everyday work. This year, the same company uses AI to draft practice questions, summarize readings, and organize lesson plans because those tasks now run quickly and cheaply enough to fit a normal budget. The owner says the company did not suddenly become more creative; instead, the economics of computing changed what was practical.</h3>
+        <p><strong>Which interpretation is MOST consistent with Moore’s Law and this chapter’s discussion?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The company mainly gained an advantage because customers became less price sensitive</button>
+          <button class="choice-btn" data-choice="B">B. The company mainly benefited from stronger barriers to entry in the tutoring industry</button>
+          <button class="choice-btn" data-choice="C">C. Falling computing costs made computationally intensive applications practical for smaller firms</button>
+          <button class="choice-btn" data-choice="D">D. Falling computing costs matter only for hardware makers, not for service businesses</button>
+        </div>
+        <div class="feedback"></div>
       </div>
 
-      <div class="question">
-        <h3>5. What is one major business implication of falling computing costs?</h3>
-        <p>A) Fewer opportunities for innovation<br>
-        B) Less experimentation with new products<br>
-        C) More experimentation and new business models<br>
-        D) Slower adoption of advanced software</p>
-        <div class="answer"><strong>Answer:</strong> C<br><strong>Explanation:</strong> Lower costs make it easier for firms to test ideas, launch new services, and build new digital offerings.</div>
+      <div class="question" data-correct="B">
+        <h3>5. During a strategy meeting, an intern says that because laptops are already fast, future hardware improvements will not matter very much to business decisions. Another intern argues that even modest improvements can unlock new products when those gains happen repeatedly over time and at lower cost. The manager wants to know which view better matches how computing usually affects markets.</h3>
+        <p><strong>Which response is BEST?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The first intern is right, because once devices feel fast, further gains stop affecting demand</button>
+          <button class="choice-btn" data-choice="B">B. The second intern is right, because repeated improvements in price and performance can create entirely new uses</button>
+          <button class="choice-btn" data-choice="C">C. Both interns are wrong, because only software design changes create business value</button>
+          <button class="choice-btn" data-choice="D">D. Neither view matters, because managers should focus on current products instead of future capabilities</button>
+        </div>
+        <div class="feedback"></div>
       </div>
     </section>
 
     <footer>
+      MIS 301 Extra Credit Study Guide • Chapter 6 Template
+    </footer>
+  </div>
+
+  <script>
+    const feedbackMap = {
+      1: {
+        correct: 'B',
+        correctText: "Correct. This scenario is about price elasticity tied to falling computing costs. As computing becomes cheaper, startups can offer features that used to be too expensive, and demand expands because the product becomes affordable to more users.",
+        wrong: {
+          A: "Incorrect. Switching costs describe how hard it is for users to leave after adopting a product. The scenario is mainly about why the app can offer advanced features at all, not why students stay once they adopt it.",
+          C: "Incorrect. Vertical integration means one firm controls multiple stages of production or distribution. Nothing in the scenario suggests the startup now owns more of its supply chain.",
+          D: "Incorrect. Bargaining power of suppliers is about how much leverage suppliers have over firms. The scenario is focused on cheaper computing making new features practical, not suppliers forcing student adoption."
+        }
+      },
+      2: {
+        correct: 'D',
+        correctText: "Correct. The key idea is that managers often think linearly even though computing improves exponentially. That makes them underestimate how repeated technical improvements can eventually reshape a product or service.",
+        wrong: {
+          A: "Incorrect. The scenario is not about managers believing demand is fixed. It is about them misreading the speed and cumulative effect of technological change.",
+          B: "Incorrect. Hardware clearly matters here, but this answer is too narrow. The deeper issue is that managers misjudge exponential improvement, not that they ignore users.",
+          C: "Incorrect. The scenario does not suggest managers ignored customer preferences. The problem is misunderstanding how fast technical capability can compound over time."
+        }
+      },
+      3: {
+        correct: 'A',
+        correctText: "Correct. This is digital convergence: one device now performs many functions that once required separate products. The scenario directly highlights how increasing computing power allowed those tools to merge into a single platform.",
+        wrong: {
+          B: "Incorrect. Capital intensity refers to the need for large upfront investment, usually in plants, equipment, or infrastructure. That does not explain why many functions now exist in one phone.",
+          C: "Incorrect. Network effects mean a product becomes more valuable as more people use it. The scenario is about combining functions inside one device, not the value created by more users joining a network.",
+          D: "Incorrect. Switching costs may help people stay with a device ecosystem, but they do not explain why a single device replaced many separate tools."
+        }
+      },
+      4: {
+        correct: 'C',
+        correctText: "Correct. The scenario shows that tasks once too costly or slow became practical for a small firm once computing got cheaper and faster. That is exactly how falling computing costs expand access to computationally intensive applications.",
+        wrong: {
+          A: "Incorrect. Customer price sensitivity is not the main issue here. The change happened because the firm could now afford the technology, not because customers changed how they view price.",
+          B: "Incorrect. Barriers to entry concern how hard it is for new firms to enter a market. The scenario is about a company adopting AI tools, not about blocking rivals from entering tutoring.",
+          D: "Incorrect. This choice misses the main lesson of the chapter. Falling computing costs affect many service businesses because they can now use advanced software that was once too expensive."
+        }
+      },
+      5: {
+        correct: 'B',
+        correctText: "Correct. The second intern best matches the chapter. Repeated improvements in price and performance can unlock new use cases, new products, and new business models even when the gains seem small at first.",
+        wrong: {
+          A: "Incorrect. This answer assumes demand stops growing once devices feel fast enough, but the chapter emphasizes that cheaper computing often creates entirely new uses and more demand.",
+          C: "Incorrect. Software matters, but the chapter explains that hardware price and performance trends also shape what software and services become possible.",
+          D: "Incorrect. Managers do need to focus on current operations, but ignoring future capabilities is exactly the kind of blind spot this chapter warns against."
+        }
+      }
+    };
+
+    document.querySelectorAll('.question').forEach((questionEl, index) => {
+      const qNum = index + 1;
+      const buttons = questionEl.querySelectorAll('.choice-btn');
+      const feedback = questionEl.querySelector('.feedback');
+      const correct = questionEl.dataset.correct;
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.dataset.choice;
+
+          buttons.forEach(b => {
+            b.disabled = true;
+            if (b.dataset.choice === correct) {
+              b.classList.add('correct-choice');
+            }
+            if (b.dataset.choice === selected && selected !== correct) {
+              b.classList.add('incorrect-choice');
+            }
+          });
+
+          if (selected === correct) {
+            feedback.className = 'feedback show correct';
+            feedback.innerHTML = `<strong>Correct.</strong> ${feedbackMap[qNum].correctText}`;
+          } else {
+            feedback.className = 'feedback show incorrect';
+            feedback.innerHTML = `<strong>Incorrect.</strong> ${feedbackMap[qNum].wrong[selected]}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
       MIS 301 Extra Credit Study Guide • Chapter 6 Template
     </footer>
   </div>
