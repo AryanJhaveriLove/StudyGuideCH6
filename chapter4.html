@@ -1,1 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 4 Study Guide</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #bf5700;
+      --accent-dark: #8f3f00;
+      --border: #e5e7eb;
+      --success: #166534;
+      --error: #991b1b;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-inner {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: var(--accent-dark);
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.4rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 8px 0;
+      font-size: 1.05rem;
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .card h2, .section-title {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .term {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .term:first-of-type,
+    .question:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .term h3,
+    .question h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .question {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #d1d5db;
+    }
+
+    .choice-btn.correct-choice {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .choice-btn.incorrect-choice {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.correct {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 28px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 1.9rem; }
+      .container { padding: 20px 14px 40px; }
+      .hero, .section, .card { padding: 20px; }
+      .nav-inner { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="brand">MIS 301 Study Guides</span>
+      <a href="index.html">Home</a>
+      <a href="chapter1.html">Chapter 1</a>
+      <a href="chapter2.html">Chapter 2</a>
+      <a href="chapter3.html">Chapter 3</a>
+      <a href="chapter4.html">Chapter 4</a>
+      <a href="chapter6.html">Chapter 6</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Chapter 4 Study Guide</h1>
+      <p><strong>Disruptive Technologies:</strong> Understanding How New Technologies Change Markets</p>
+      <p>This chapter explains what truly disruptive innovation is, how it differs from sustaining innovation, and why established firms often fail to respond effectively when new technologies first appear weak or unimportant.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>What to Know</h2>
+        <p class="muted">This chapter is about why some new technologies reshape markets and why dominant firms often miss the threat until it is too late.</p>
+      </div>
+      <div class="card">
+        <h2>Main Theme</h2>
+        <p class="muted">Disruptive innovations usually start out worse on the dimensions current customers care about, but improve over time and eventually invade mainstream markets.</p>
+      </div>
+      <div class="card">
+        <h2>Manager Takeaway</h2>
+        <p class="muted">Managers must recognize that early weak performance does not mean a technology is unimportant. Sometimes the real threat is hidden in affordability, accessibility, and future improvement.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Vocabulary</h2>
+
+      <div class="term">
+        <h3>Disruptive Innovation</h3>
+        <p><span class="label">Definition:</span> Disruptive innovation is a process in which a new technology or business model begins by serving low-end, overlooked, or entirely new customers and later improves enough to challenge established firms in the mainstream market.</p>
+        <p><span class="label">Why it matters:</span> Managers often ignore disruptive technologies because they initially seem weaker or less profitable than existing products.</p>
+        <p><span class="label">Example:</span> Early digital cameras had poor image quality, but over time they improved enough to replace film cameras for most consumers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Sustaining Innovation</h3>
+        <p><span class="label">Definition:</span> Sustaining innovation improves existing products or services along dimensions that current customers already value.</p>
+        <p><span class="label">Why it matters:</span> Established firms are usually good at sustaining innovation because it matches the demands of their current customers and business models.</p>
+        <p><span class="label">Example:</span> A new smartphone model with a better camera, faster processor, and longer battery life is usually a sustaining innovation.</p>
+      </div>
+
+      <div class="term">
+        <h3>Enabling Technology</h3>
+        <p><span class="label">Definition:</span> An enabling technology is a technology that makes a product or service more affordable, accessible, or practical for a wider group of users.</p>
+        <p><span class="label">Why it matters:</span> Many successful disruptive technologies depend on enabling technology to reach customers who were previously excluded from a market.</p>
+        <p><span class="label">Example:</span> GPUs helped enable modern generative AI by making large-scale model training and inference possible.</p>
+      </div>
+
+      <div class="term">
+        <h3>Value Network</h3>
+        <p><span class="label">Definition:</span> A value network is the set of suppliers, partners, distributors, customers, and complementary relationships that support a business model or technology.</p>
+        <p><span class="label">Why it matters:</span> A disruptive technology succeeds more easily when the broader network benefits from its growth.</p>
+        <p><span class="label">Example:</span> Cars were supported by a broader value network that included roads, gas stations, mechanics, and manufacturers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Innovative Business Model</h3>
+        <p><span class="label">Definition:</span> An innovative business model is a new way of delivering and monetizing a product or service that changes who can access it and how value is captured.</p>
+        <p><span class="label">Why it matters:</span> Disruption is often driven not just by technology, but also by a business model that targets new users or low-end customers more effectively.</p>
+        <p><span class="label">Example:</span> Ride-sharing apps offered a different business model than traditional taxi companies by using smartphones and flexible drivers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Market Shock</h3>
+        <p><span class="label">Definition:</span> A market shock is a sudden and significant change that disrupts existing competition and customer behavior.</p>
+        <p><span class="label">Why it matters:</span> Truly disruptive technologies can create shocks that force firms to rethink strategy and operations.</p>
+        <p><span class="label">Example:</span> The shift from physical media to streaming changed how entertainment firms made money and reached customers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Low-End Market</h3>
+        <p><span class="label">Definition:</span> The low-end market consists of customers who are overserved by existing products and may accept a cheaper, simpler alternative.</p>
+        <p><span class="label">Why it matters:</span> Disruptive innovations often begin by appealing to low-end customers that leading firms do not prioritize.</p>
+        <p><span class="label">Example:</span> A simpler service with lower performance but much lower price may appeal to customers who do not need premium features.</p>
+      </div>
+
+      <div class="term">
+        <h3>New Market Disruption</h3>
+        <p><span class="label">Definition:</span> New market disruption occurs when a product or service creates a new market by reaching customers who previously did not consume the traditional product.</p>
+        <p><span class="label">Why it matters:</span> Incumbents may ignore these markets because they do not resemble their current customers.</p>
+        <p><span class="label">Example:</span> Early personal computing opened computing to users who would never have bought a mainframe or minicomputer.</p>
+      </div>
+
+      <div class="term">
+        <h3>Price Elasticity of Technology</h3>
+        <p><span class="label">Definition:</span> Price elasticity of technology refers to the idea that as technology becomes cheaper, demand and usage often increase dramatically.</p>
+        <p><span class="label">Why it matters:</span> Falling prices can turn a weak early technology into a major competitive threat once it becomes affordable to mass users.</p>
+        <p><span class="label">Example:</span> As digital storage and bandwidth became cheaper, streaming services became practical at large scale.</p>
+      </div>
+
+      <div class="term">
+        <h3>Incumbent Firm</h3>
+        <p><span class="label">Definition:</span> An incumbent firm is an established company already dominant or active in an industry.</p>
+        <p><span class="label">Why it matters:</span> Incumbents often miss disruptive threats because they focus on satisfying current customers and protecting current margins.</p>
+        <p><span class="label">Example:</span> A dominant film camera company was an incumbent when digital photography began to emerge.</p>
+      </div>
+
+      <div class="term">
+        <h3>Technology Adoption Curve</h3>
+        <p><span class="label">Definition:</span> The technology adoption curve describes how different groups of customers adopt innovations at different times, from early adopters to the mainstream market.</p>
+        <p><span class="label">Why it matters:</span> Disruptive innovations often begin with fringe or niche users before eventually improving enough for the mainstream.</p>
+        <p><span class="label">Example:</span> New AI tools may be adopted first by technical users before broader business adoption follows.</p>
+      </div>
+
+      <div class="term">
+        <h3>Platform Envelopment</h3>
+        <p><span class="label">Definition:</span> Platform envelopment occurs when one platform enters another market by bundling overlapping functionality into its existing offering.</p>
+        <p><span class="label">Why it matters:</span> A dominant platform can quickly overpower smaller standalone firms by using its current user base and scope.</p>
+        <p><span class="label">Example:</span> A large social media app adding built-in photo editing or marketplace tools can threaten specialized standalone firms.</p>
+      </div>
+
+      <div class="term">
+        <h3>Analog to Digital Shift</h3>
+        <p><span class="label">Definition:</span> The analog to digital shift is the transition from physical or analog technologies to digital ones.</p>
+        <p><span class="label">Why it matters:</span> Many classic disruptive innovations began as weak digital alternatives before eventually outperforming older analog systems on the dimensions that mattered most.</p>
+        <p><span class="label">Example:</span> Music moved from physical CDs to digital files and then to streaming platforms.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Key Concepts</h2>
+      <ul>
+        <li>Disruptive innovation is not just any big innovation. It usually starts weaker on traditional performance measures.</li>
+        <li>Sustaining innovation improves what current customers already value, while disruptive innovation often begins outside the mainstream.</li>
+        <li>Established firms often ignore disruptive technologies because their current customers do not initially want them.</li>
+        <li>Affordability, accessibility, and business model innovation often matter as much as raw technical performance.</li>
+        <li>A disruptive technology becomes more dangerous as it improves and moves into the mainstream market.</li>
+        <li>Managers should pay attention to technologies that seem weak now but could improve rapidly over time.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Interactive Practice Quiz</h2>
+
+      <div class="question" data-qid="c4q1" data-correct="C">
+        <h3>1. An established camera company ignores early digital cameras because the image quality is much worse than film and its best customers are not asking for digital products. A smaller firm keeps improving digital technology until it becomes good enough for everyday consumers and eventually replaces film for most users.</h3>
+        <p><strong>Which concept BEST explains what happened?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Sustaining innovation, because the new cameras directly improved what the incumbent’s best customers already valued from the beginning</button>
+          <button class="choice-btn" data-choice="B">B. Supplier power, because suppliers forced the incumbent firm to stop selling film cameras</button>
+          <button class="choice-btn" data-choice="C">C. Disruptive innovation, because the new technology began weaker on traditional measures but improved enough to invade the mainstream market</button>
+          <button class="choice-btn" data-choice="D">D. Vertical integration, because the digital camera firm controlled every stage of manufacturing</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c4q2" data-correct="A">
+        <h3>2. A leading software company keeps adding new premium features to satisfy its current enterprise customers. Meanwhile, a cheaper new service with fewer features becomes popular with smaller customers who were never well served by the premium product. Over time, the cheaper service improves and starts attracting the mainstream market.</h3>
+        <p><strong>Which answer BEST describes the difference between the two types of innovation in this scenario?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The premium firm is pursuing sustaining innovation, while the cheaper entrant is following a disruptive path</button>
+          <button class="choice-btn" data-choice="B">B. Both firms are pursuing sustaining innovation because both continue to improve their products</button>
+          <button class="choice-btn" data-choice="C">C. The premium firm is disruptive because it serves enterprise customers, while the entrant is sustaining because it is cheaper</button>
+          <button class="choice-btn" data-choice="D">D. Neither firm is using innovation because only hardware products can be disruptive</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c4q3" data-correct="D">
+        <h3>3. A company argues that a new technology can never become important because it currently performs worse than the incumbent product on the metric most established customers care about. Another manager warns that the new technology could still matter if it is cheaper, easier to access, and improves over time.</h3>
+        <p><strong>Which Chapter 4 lesson is MOST relevant?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. A technology that starts weaker is never strategically important</button>
+          <button class="choice-btn" data-choice="B">B. Low initial performance proves that customers will never adopt the new technology</button>
+          <button class="choice-btn" data-choice="C">C. A technology matters only if current mainstream customers immediately prefer it</button>
+          <button class="choice-btn" data-choice="D">D. Early weakness does not eliminate disruptive potential if the technology is affordable, accessible, and capable of improvement</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c4q4" data-correct="B">
+        <h3>4. A new service succeeds not only because of its technology, but because it reaches customers who never used the old product and offers a cheaper, simpler way to get the job done. Suppliers, users, and related partners all benefit as the service expands.</h3>
+        <p><strong>Which combination BEST explains this success?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Strong rivalry and weak customer power</button>
+          <button class="choice-btn" data-choice="B">B. An innovative business model supported by a value network that benefits from the new technology</button>
+          <button class="choice-btn" data-choice="C">C. High switching costs created by closed standards alone</button>
+          <button class="choice-btn" data-choice="D">D. A value chain that eliminates the need for any external partners</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c4q5" data-correct="C">
+        <h3>5. A dominant social media platform adds a built-in photography suite that makes standalone editing apps less important for the average user. The social platform already has the audience, attention, and user data, so the smaller firms struggle to defend their market.</h3>
+        <p><strong>Which concept BEST explains the social platform’s advantage?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Sustaining innovation, because all new features on a platform count as sustaining innovation</button>
+          <button class="choice-btn" data-choice="B">B. Barriers to entry, because photography apps are banned from entering the market</button>
+          <button class="choice-btn" data-choice="C">C. Platform envelopment, because the large platform uses its existing user base and scope to absorb another market</button>
+          <button class="choice-btn" data-choice="D">D. Supplier power, because camera manufacturers control the social media platform</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <footer>
+      MIS 301 Extra Credit Study Guide • Chapter 4
+    </footer>
+  </div>
+
+  <script>
+    const feedbackMap = {
+      c4q1: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because sustaining innovation improves performance for the incumbent’s existing mainstream customers. In the scenario, the new technology begins worse on traditional measures.',
+          B: 'B is incorrect because the story is not about suppliers forcing the incumbent out. The problem is the firm misjudging a new technology’s future trajectory.',
+          C: 'C is correct because the digital camera starts out weak compared with film, improves over time, and eventually invades the mainstream market. That is a classic pattern of disruptive innovation.',
+          D: 'D is incorrect because vertical integration is not the key issue here. The scenario is about how a weak early technology improves enough to displace the incumbent.'
+        }
+      },
+      c4q2: {
+        correct: 'A',
+        rationale: {
+          A: 'A is correct because the premium firm is improving existing products for current customers, which is sustaining innovation, while the cheaper entrant starts with lower-end or underserved customers and follows a disruptive path.',
+          B: 'B is incorrect because not all improvement is sustaining. The entrant is changing the market path by starting with customers the premium firm does not prioritize.',
+          C: 'C is incorrect because serving enterprise customers does not make a firm disruptive. In this case, the established firm is serving its mainstream customers in a classic sustaining pattern.',
+          D: 'D is incorrect because disruptive innovation is not limited to hardware. Services and software can be disruptive too.'
+        }
+      },
+      c4q3: {
+        correct: 'D',
+        rationale: {
+          A: 'A is incorrect because Chapter 4 specifically warns against dismissing a technology just because it starts weak on traditional performance measures.',
+          B: 'B is incorrect because early customer rejection does not prove the technology will always fail. It may first appeal to different customers or improve over time.',
+          C: 'C is incorrect because disruptive innovations often do not matter to mainstream customers at first. That is part of why incumbents miss them.',
+          D: 'D is correct because a technology can still be disruptive if it is cheaper, more accessible, or easier to use and can improve over time until it becomes good enough for broader adoption.'
+        }
+      },
+      c4q4: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because rivalry and customer power do not explain why the new service can reach previously unserved customers and align partners around growth.',
+          B: 'B is correct because Chapter 4 emphasizes that disruptive success often comes from an innovative business model plus a value network in which suppliers, customers, and partners all gain as the technology expands.',
+          C: 'C is incorrect because switching costs and closed standards are not the central ideas in this scenario. The key is new accessibility and broader ecosystem support.',
+          D: 'D is incorrect because a value network does not eliminate external partners. It depends on relationships across suppliers, distributors, and customers.'
+        }
+      },
+      c4q5: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because simply adding a feature does not automatically make something sustaining innovation in the sense tested here. The important concept is the large platform using its scope to absorb another market.',
+          B: 'B is incorrect because the smaller firms are not blocked by formal entry barriers. They are threatened by a dominant platform moving into their space.',
+          C: 'C is correct because platform envelopment occurs when a large platform bundles overlapping features and uses its installed base, attention, and existing reach to weaken standalone competitors.',
+          D: 'D is incorrect because supplier power is not the main issue here. The threat comes from the social platform’s existing user base and market position.'
+        }
+      }
+    };
+
+    function buildFullExplanation(qid) {
+      const letters = ['A', 'B', 'C', 'D'];
+      const items = letters.map(letter => `<li><strong>${letter}.</strong> ${feedbackMap[qid].rationale[letter]}</li>`).join('');
+      return `<div style="margin-top:10px;"><strong>Answer review for all choices:</strong></div><ul style="margin-top:10px; padding-left:20px;">${items}</ul>`;
+    }
+
+    document.querySelectorAll('.question').forEach((questionEl) => {
+      const qid = questionEl.dataset.qid;
+      const buttons = questionEl.querySelectorAll('.choice-btn');
+      const feedback = questionEl.querySelector('.feedback');
+      const correct = questionEl.dataset.correct;
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.dataset.choice;
+
+          buttons.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('correct-choice', 'incorrect-choice');
+            if (b.dataset.choice === correct) b.classList.add('correct-choice');
+            if (b.dataset.choice === selected && selected !== correct) b.classList.add('incorrect-choice');
+          });
+
+          const fullExplanation = buildFullExplanation(qid);
+
+          if (selected === correct) {
+            feedback.className = 'feedback show correct';
+            feedback.innerHTML = `<strong>Correct.</strong> You chose the right answer. ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          } else {
+            feedback.className = 'feedback show incorrect';
+            feedback.innerHTML = `<strong>Incorrect.</strong> You chose ${selected}, but the correct answer is ${correct}. ${feedbackMap[qid].rationale[selected]} ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
