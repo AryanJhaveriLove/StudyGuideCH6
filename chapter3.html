@@ -1,1 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 3 Study Guide</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #bf5700;
+      --accent-dark: #8f3f00;
+      --border: #e5e7eb;
+      --success: #166534;
+      --error: #991b1b;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-inner {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: var(--accent-dark);
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.4rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 8px 0;
+      font-size: 1.05rem;
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .card h2, .section-title {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .term {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .term:first-of-type,
+    .question:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .term h3,
+    .question h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .question {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #d1d5db;
+    }
+
+    .choice-btn.correct-choice {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .choice-btn.incorrect-choice {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.correct {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 28px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 1.9rem; }
+      .container { padding: 20px 14px 40px; }
+      .hero, .section, .card { padding: 20px; }
+      .nav-inner { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="brand">MIS 301 Study Guides</span>
+      <a href="index.html">Home</a>
+      <a href="chapter1.html">Chapter 1</a>
+      <a href="chapter2.html">Chapter 2</a>
+      <a href="chapter3.html">Chapter 3</a>
+      <a href="chapter6.html">Chapter 6</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Chapter 3 Study Guide</h1>
+      <p><strong>Platforms and Network Effects:</strong> Winning in Markets with Increasing Returns</p>
+      <p>This chapter explains how platforms create value, why network effects can make winners stronger over time, and how switching costs, complements, and installed bases can create lock-in.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>What to Know</h2>
+        <p class="muted">This chapter is about platform businesses, network effects, and why some digital markets become dominated by a few powerful firms.</p>
+      </div>
+      <div class="card">
+        <h2>Main Theme</h2>
+        <p class="muted">A platform becomes more valuable as more users and complements join, which can create self-reinforcing growth and make it hard for rivals to catch up.</p>
+      </div>
+      <div class="card">
+        <h2>Manager Takeaway</h2>
+        <p class="muted">Managers should understand how user growth, complements, and switching costs work together to create lock-in and competitive advantage in platform markets.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Vocabulary</h2>
+
+      <div class="term">
+        <h3>Platform</h3>
+        <p><span class="label">Definition:</span> A platform is a business or technology foundation that connects different user groups and enables interactions between them.</p>
+        <p><span class="label">Why it matters:</span> Many powerful firms do not just sell products. They create platforms that attract users, developers, advertisers, sellers, or other groups.</p>
+        <p><span class="label">Example:</span> eBay connects buyers and sellers, while Apple’s ecosystem connects device users, developers, and complement providers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Network Effects</h3>
+        <p><span class="label">Definition:</span> Network effects exist when the value of a product or service increases as more people use it.</p>
+        <p><span class="label">Why it matters:</span> Network effects can create self-reinforcing growth that helps leading firms become even stronger over time.</p>
+        <p><span class="label">Example:</span> Social media becomes more useful when more of your friends and contacts are on the same platform.</p>
+      </div>
+
+      <div class="term">
+        <h3>Direct Network Effects</h3>
+        <p><span class="label">Definition:</span> Direct network effects occur when each additional user directly increases the value of the network for other users of the same group.</p>
+        <p><span class="label">Why it matters:</span> Direct network effects can make users prefer the biggest network because more participants create more utility.</p>
+        <p><span class="label">Example:</span> A messaging app becomes more useful when more of your friends are also using it.</p>
+      </div>
+
+      <div class="term">
+        <h3>Indirect Network Effects</h3>
+        <p><span class="label">Definition:</span> Indirect network effects occur when growth in one user group makes the platform more attractive to another group, which then increases value for the first group.</p>
+        <p><span class="label">Why it matters:</span> Many platform businesses depend on reinforcing interactions across different sides of the market.</p>
+        <p><span class="label">Example:</span> More users on a smartphone platform attract more app developers, and more apps make the platform more valuable to users.</p>
+      </div>
+
+      <div class="term">
+        <h3>Two-Sided Market</h3>
+        <p><span class="label">Definition:</span> A two-sided market is a market in which a platform serves two distinct groups that benefit from each other’s participation.</p>
+        <p><span class="label">Why it matters:</span> Managers need to understand that attracting one side often helps attract the other side.</p>
+        <p><span class="label">Example:</span> Credit card networks connect merchants and cardholders, while ride-sharing apps connect drivers and riders.</p>
+      </div>
+
+      <div class="term">
+        <h3>Installed Base</h3>
+        <p><span class="label">Definition:</span> An installed base is the total number of users, devices, or systems already using a product or platform.</p>
+        <p><span class="label">Why it matters:</span> A large installed base can attract more complements and make it harder for rivals to overcome the leader.</p>
+        <p><span class="label">Example:</span> A platform with millions of users is more attractive to software developers than a platform with only a small user base.</p>
+      </div>
+
+      <div class="term">
+        <h3>Complements</h3>
+        <p><span class="label">Definition:</span> Complements are products or services that add value to another product when used together with it.</p>
+        <p><span class="label">Why it matters:</span> Strong complements can make a platform more attractive and harder to leave.</p>
+        <p><span class="label">Example:</span> Apps are complements to smartphones, and video games are complements to gaming consoles.</p>
+      </div>
+
+      <div class="term">
+        <h3>Switching Costs</h3>
+        <p><span class="label">Definition:</span> Switching costs are the costs, inconvenience, time, or effort a user faces when changing from one product or platform to another.</p>
+        <p><span class="label">Why it matters:</span> Switching costs help platforms keep users even if rivals offer improvements.</p>
+        <p><span class="label">Example:</span> Moving files, learning a new system, repurchasing apps, or losing compatibility can all be switching costs.</p>
+      </div>
+
+      <div class="term">
+        <h3>Lock-In</h3>
+        <p><span class="label">Definition:</span> Lock-in occurs when users become dependent on a platform or ecosystem and find it difficult or costly to switch away.</p>
+        <p><span class="label">Why it matters:</span> Lock-in can protect a platform leader and weaken competitive pressure from challengers.</p>
+        <p><span class="label">Example:</span> A user deeply invested in a device ecosystem, app library, and cloud storage system may stay even if another option is cheaper.</p>
+      </div>
+
+      <div class="term">
+        <h3>Winner-Take-All Dynamics</h3>
+        <p><span class="label">Definition:</span> Winner-take-all dynamics occur when network effects and scale advantages allow one platform to capture most of the market value.</p>
+        <p><span class="label">Why it matters:</span> Platform markets can become concentrated quickly, making early growth and adoption especially important.</p>
+        <p><span class="label">Example:</span> One social platform may dominate because users prefer to be where everyone else already is.</p>
+      </div>
+
+      <div class="term">
+        <h3>Standards</h3>
+        <p><span class="label">Definition:</span> Standards are rules or specifications that allow products, services, or components to work together.</p>
+        <p><span class="label">Why it matters:</span> Standards influence whether complements can be created easily and whether platforms grow more open or more closed.</p>
+        <p><span class="label">Example:</span> A platform with widely adopted standards may attract more third-party developers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Same-Side Network Effects</h3>
+        <p><span class="label">Definition:</span> Same-side network effects are effects within one user group where more participants on that same side increase value for each other.</p>
+        <p><span class="label">Why it matters:</span> This helps explain why a large community can become more attractive to each new user.</p>
+        <p><span class="label">Example:</span> More users on a social network create more possible connections for other users.</p>
+      </div>
+
+      <div class="term">
+        <h3>Cross-Side Network Effects</h3>
+        <p><span class="label">Definition:</span> Cross-side network effects are effects where growth in one user group increases value for another user group on the same platform.</p>
+        <p><span class="label">Why it matters:</span> Many platform strategies depend on increasing participation on one side to attract the other side.</p>
+        <p><span class="label">Example:</span> More app developers increase value for smartphone users, and more users increase value for app developers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Platform Envelopment</h3>
+        <p><span class="label">Definition:</span> Platform envelopment occurs when one platform enters another platform’s market by bundling its own functionality with the new service.</p>
+        <p><span class="label">Why it matters:</span> A large platform can use its existing user base and scope to overpower standalone competitors.</p>
+        <p><span class="label">Example:</span> A dominant social app adding a marketplace or payment feature can threaten firms that specialize only in those areas.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Key Concepts</h2>
+      <ul>
+        <li>Platforms create value by connecting users and enabling interactions.</li>
+        <li>Network effects mean that more users can make the platform more valuable.</li>
+        <li>Complements such as apps, services, and accessories can strengthen a platform’s attractiveness.</li>
+        <li>Switching costs and lock-in help explain why users may stay even when alternatives exist.</li>
+        <li>Installed base matters because a large existing user population attracts more complements and more future users.</li>
+        <li>Platform markets can show winner-take-all dynamics, especially when strong network effects are present.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Interactive Practice Quiz</h2>
+
+      <div class="question" data-qid="c3q1" data-correct="B">
+        <h3>1. A student asks why people still sell products on eBay when there are many other websites available. Her professor explains that part of the reason is that buyers prefer being where many sellers already are, and sellers prefer being where many buyers already are.</h3>
+        <p><strong>Which concept BEST explains this pattern?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Barriers to entry, because new sites are legally blocked from competing</button>
+          <button class="choice-btn" data-choice="B">B. Network effects, because the platform becomes more valuable as more users on each side participate</button>
+          <button class="choice-btn" data-choice="C">C. Vertical integration, because eBay controls every part of the supply chain</button>
+          <button class="choice-btn" data-choice="D">D. Capital intensity, because auctions require large physical assets</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3q2" data-correct="D">
+        <h3>2. A smartphone platform with a large user base attracts many app developers. Those extra apps make the platform even more attractive to additional users, which then draws in even more developers.</h3>
+        <p><strong>What is the BEST description of what is happening?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Only direct network effects are operating because all value is created within one user group</button>
+          <button class="choice-btn" data-choice="B">B. Supplier power is rising because app developers control the operating system</button>
+          <button class="choice-btn" data-choice="C">C. The platform is relying mainly on a value chain rather than complements</button>
+          <button class="choice-btn" data-choice="D">D. Cross-side or indirect network effects are reinforcing growth between users and developers</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3q3" data-correct="A">
+        <h3>3. A user is thinking about leaving one device ecosystem for another, but doing so would require repurchasing apps, moving files, learning a new interface, and losing compatibility with current accessories.</h3>
+        <p><strong>Which concept BEST explains why the user may stay with the current platform?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Switching costs, because changing platforms involves time, effort, and economic sacrifice</button>
+          <button class="choice-btn" data-choice="B">B. Threat of substitutes, because there are no alternative products in the market</button>
+          <button class="choice-btn" data-choice="C">C. Direct network effects, because the interface improves automatically as more people join</button>
+          <button class="choice-btn" data-choice="D">D. Low installed base, because small platforms are easier to leave</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3q4" data-correct="C">
+        <h3>4. A new social app has an elegant design, but very few people use it. Another social platform is less innovative, yet users stay because that is where their friends, communities, and message histories already are.</h3>
+        <p><strong>Which explanation BEST fits this scenario?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The smaller app wins because better design always beats network effects</button>
+          <button class="choice-btn" data-choice="B">B. The larger app is protected mainly by supplier power rather than user behavior</button>
+          <button class="choice-btn" data-choice="C">C. The larger app benefits from network effects and lock-in, making it hard for a better-designed rival to attract users</button>
+          <button class="choice-btn" data-choice="D">D. The larger app has no real advantage because all social platforms are perfect substitutes</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3q5" data-correct="B">
+        <h3>5. A large platform with millions of users adds a built-in feature that overlaps with the services of a much smaller standalone company. Because the large platform already has users, data, and attention, the smaller firm struggles to compete even though it focused only on that niche service.</h3>
+        <p><strong>Which concept BEST explains the large platform’s advantage?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Value chain optimization, because the large platform has lower manufacturing costs</button>
+          <button class="choice-btn" data-choice="B">B. Platform envelopment, because the large platform can use its existing scope and user base to move into the smaller firm’s market</button>
+          <button class="choice-btn" data-choice="C">C. Price elasticity, because demand falls when prices rise</button>
+          <button class="choice-btn" data-choice="D">D. Vertical integration, because the platform owns every supplier in the industry</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <footer>
+      MIS 301 Extra Credit Study Guide • Chapter 3
+    </footer>
+  </div>
+
+  <script>
+    const feedbackMap = {
+      c3q1: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because the scenario is not about legal or structural barriers blocking entry. It is about how user participation itself creates value.',
+          B: 'B is correct because eBay becomes more useful as more buyers and sellers join. That is exactly how network effects work in a platform market.',
+          C: 'C is incorrect because vertical integration is about controlling multiple stages of production or distribution. That is not the main issue here.',
+          D: 'D is incorrect because the scenario does not depend on heavy physical assets. The core driver is the value created by many participants using the same platform.'
+        }
+      },
+      c3q2: {
+        correct: 'D',
+        rationale: {
+          A: 'A is incorrect because the story involves two different groups, users and developers, affecting each other. That means it is not only a same-side effect.',
+          B: 'B is incorrect because app developers do not automatically become powerful suppliers in the Porter sense here. The main point is mutual reinforcement across platform sides.',
+          C: 'C is incorrect because complements matter here, and the dynamic described is specifically about how one side attracts the other side.',
+          D: 'D is correct because more users attract more developers, and more developers with more apps attract more users. That is the classic pattern of indirect or cross-side network effects.'
+        }
+      },
+      c3q3: {
+        correct: 'A',
+        rationale: {
+          A: 'A is correct because repurchasing apps, moving files, learning a new system, and losing compatibility are all switching costs that discourage users from leaving.',
+          B: 'B is incorrect because the question is not saying alternatives do not exist. It is explaining why leaving is costly even when alternatives are available.',
+          C: 'C is incorrect because direct network effects mean value rises as more users of the same group join. The scenario instead focuses on the cost of switching away.',
+          D: 'D is incorrect because installed base refers to how many users already use a product. The issue here is the user’s difficulty in changing platforms.'
+        }
+      },
+      c3q4: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because in platform markets, better design alone may not overcome strong network effects and existing user relationships.',
+          B: 'B is incorrect because the advantage described comes from users, communities, and data staying on the dominant platform, not mainly from supplier power.',
+          C: 'C is correct because the dominant social app benefits from network effects and lock-in. Users stay where their friends and history already are, which makes it hard for rivals to break in.',
+          D: 'D is incorrect because the scenario directly shows a real advantage for the larger platform. Social platforms are not always easy substitutes when network effects are strong.'
+        }
+      },
+      c3q5: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because the scenario is not about manufacturing or internal process efficiency. It is about a platform using its existing reach to enter an adjacent market.',
+          B: 'B is correct because platform envelopment happens when a large platform expands into another market by bundling or adding overlapping functionality, using its existing user base as leverage.',
+          C: 'C is incorrect because price elasticity concerns how demand changes with price. That is not the main strategic force described here.',
+          D: 'D is incorrect because vertical integration is about controlling stages of the supply chain. The scenario is about platform scope and adjacent market entry.'
+        }
+      }
+    };
+
+    function buildFullExplanation(qid) {
+      const letters = ['A', 'B', 'C', 'D'];
+      const items = letters.map(letter => `<li><strong>${letter}.</strong> ${feedbackMap[qid].rationale[letter]}</li>`).join('');
+      return `<div style="margin-top:10px;"><strong>Answer review for all choices:</strong></div><ul style="margin-top:10px; padding-left:20px;">${items}</ul>`;
+    }
+
+    document.querySelectorAll('.question').forEach((questionEl) => {
+      const qid = questionEl.dataset.qid;
+      const buttons = questionEl.querySelectorAll('.choice-btn');
+      const feedback = questionEl.querySelector('.feedback');
+      const correct = questionEl.dataset.correct;
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.dataset.choice;
+
+          buttons.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('correct-choice', 'incorrect-choice');
+            if (b.dataset.choice === correct) b.classList.add('correct-choice');
+            if (b.dataset.choice === selected && selected !== correct) b.classList.add('incorrect-choice');
+          });
+
+          const fullExplanation = buildFullExplanation(qid);
+
+          if (selected === correct) {
+            feedback.className = 'feedback show correct';
+            feedback.innerHTML = `<strong>Correct.</strong> You chose the right answer. ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          } else {
+            feedback.className = 'feedback show incorrect';
+            feedback.innerHTML = `<strong>Incorrect.</strong> You chose ${selected}, but the correct answer is ${correct}. ${feedbackMap[qid].rationale[selected]} ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
