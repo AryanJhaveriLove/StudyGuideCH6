@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1</title>
 
+<style>
+body { font-family: Arial; margin: 0; background:#f7f7f8;}
+.header { background:#bf5700; color:white; padding:30px;}
+.container { max-width:900px; margin:auto; padding:20px;}
+.card { background:white; padding:20px; margin-bottom:20px; border-radius:10px;}
+button { padding:10px; margin-top:10px; width:100%; }
+.correct { color:green; }
+.incorrect { color:red; }
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>Chapter 1</h1>
+<p>Technology and the Modern Enterprise</p>
+<a href="index.html" style="color:white;">← Back Home</a>
+</div>
+
+<div class="container">
+
+<div class="card">
+<h2>Key Concepts</h2>
+<ul>
+<li>Information systems = hardware, software, data, processes</li>
+<li>Mental models shape thinking</li>
+<li>Curse of knowledge affects communication</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Quiz</h2>
+
+<p>What is an information system?</p>
+<button onclick="check(this,'A')">A. Only software</button>
+<button onclick="check(this,'B')">B. Hardware only</button>
+<button onclick="check(this,'C')">C. Combination of tech + people + processes</button>
+
+<p id="result"></p>
+
+</div>
+
+</div>
+
+<script>
+function check(btn, choice){
+  const result = document.getElementById("result");
+
+  if(choice === "C"){
+    result.innerHTML = "Correct — includes people, processes, data, software.";
+    result.className = "correct";
+  } else {
+    result.innerHTML = "Incorrect — missing key components.";
+    result.className = "incorrect";
+  }
+}
+</script>
+
+</body>
+</html>
