@@ -1,1 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 2 Study Guide</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #bf5700;
+      --accent-dark: #8f3f00;
+      --border: #e5e7eb;
+      --success: #166534;
+      --error: #991b1b;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-inner {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: var(--accent-dark);
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.4rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 8px 0;
+      font-size: 1.05rem;
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .card h2, .section-title {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .term {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .term:first-of-type,
+    .question:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .term h3,
+    .question h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .question {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #d1d5db;
+    }
+
+    .choice-btn.correct-choice {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .choice-btn.incorrect-choice {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.correct {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 28px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 1.9rem; }
+      .container { padding: 20px 14px 40px; }
+      .hero, .section, .card { padding: 20px; }
+      .nav-inner { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="brand">MIS 301 Study Guides</span>
+      <a href="index.html">Home</a>
+      <a href="chapter1.html">Chapter 1</a>
+      <a href="chapter2.html">Chapter 2</a>
+      <a href="chapter6.html">Chapter 6</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Chapter 2 Study Guide</h1>
+      <p><strong>Strategy and Technology:</strong> Concepts and Frameworks for Achieving Success</p>
+      <p>This chapter explains how firms create competitive advantage, how industry structure affects profit, and how technology should support strategy instead of existing for its own sake.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>What to Know</h2>
+        <p class="muted">This chapter is about how firms compete, how industry forces shape profitability, and how managers use strategy to build an advantage over rivals.</p>
+      </div>
+      <div class="card">
+        <h2>Main Theme</h2>
+        <p class="muted">A firm can only outperform rivals if it chooses a distinct set of activities and aligns its processes and technology with that strategy.</p>
+      </div>
+      <div class="card">
+        <h2>Manager Takeaway</h2>
+        <p class="muted">Managers should use technology to reinforce strategy, streamline processes, and strengthen the firm’s value chain.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Vocabulary</h2>
+
+      <div class="term">
+        <h3>Strategy</h3>
+        <p><span class="label">Definition:</span> Strategy is a deliberate plan for how a firm will compete and create value in a way that is different from rivals.</p>
+        <p><span class="label">Why it matters:</span> The chapter emphasizes that firms outperform rivals by choosing a different set of activities, not by simply copying competitors.</p>
+        <p><span class="label">Example:</span> Southwest Airlines built its strategy around low-cost, short-haul service with quick turnarounds and one aircraft type.</p>
+      </div>
+
+      <div class="term">
+        <h3>Competitive Advantage</h3>
+        <p><span class="label">Definition:</span> Competitive advantage is a firm’s ability to consistently outperform its competitors.</p>
+        <p><span class="label">Why it matters:</span> Firms do not just want to survive; they want to earn better results than rivals over time.</p>
+        <p><span class="label">Example:</span> Zara’s ability to move new styles to stores quickly gives it an edge over slower fashion competitors.</p>
+      </div>
+
+      <div class="term">
+        <h3>Sustainable Competitive Advantage</h3>
+        <p><span class="label">Definition:</span> A sustainable competitive advantage is an advantage that competitors cannot easily copy or neutralize.</p>
+        <p><span class="label">Why it matters:</span> A temporary advantage is weaker if rivals can quickly imitate it.</p>
+        <p><span class="label">Example:</span> A firm with a strong brand, efficient processes, and hard-to-copy information systems may have a sustainable advantage.</p>
+      </div>
+
+      <div class="term">
+        <h3>Industry Structure</h3>
+        <p><span class="label">Definition:</span> Industry structure is the pattern of competition and power relationships within an industry.</p>
+        <p><span class="label">Why it matters:</span> The profitability of a firm depends partly on how attractive or difficult its industry is.</p>
+        <p><span class="label">Example:</span> An industry with many competitors and low barriers to entry is usually harder to profit in.</p>
+      </div>
+
+      <div class="term">
+        <h3>Porter’s Five Forces</h3>
+        <p><span class="label">Definition:</span> Porter’s Five Forces is a framework for analyzing industry structure through rivalry, threat of new entrants, threat of substitutes, bargaining power of suppliers, and bargaining power of customers.</p>
+        <p><span class="label">Why it matters:</span> It helps managers understand where pressure on profits comes from.</p>
+        <p><span class="label">Example:</span> A firm in an industry with strong rivalry and low switching costs may face lower profits.</p>
+      </div>
+
+      <div class="term">
+        <h3>Rivalry</h3>
+        <p><span class="label">Definition:</span> Rivalry is the intensity of competition among existing firms in an industry.</p>
+        <p><span class="label">Why it matters:</span> Strong rivalry makes it harder for firms to earn high profits.</p>
+        <p><span class="label">Example:</span> Used car dealers face strong rivalry because many sellers compete for the same customers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Threat of New Entrants</h3>
+        <p><span class="label">Definition:</span> The threat of new entrants is the likelihood that new firms can enter the industry and compete.</p>
+        <p><span class="label">Why it matters:</span> If entry is easy, existing firms have less protection and may earn lower profits.</p>
+        <p><span class="label">Example:</span> It is easier to start a food truck than a professional sports league team, so food trucks face a higher threat of entry.</p>
+      </div>
+
+      <div class="term">
+        <h3>Threat of Substitutes</h3>
+        <p><span class="label">Definition:</span> The threat of substitutes is the pressure from alternative products or services that can satisfy the same customer need.</p>
+        <p><span class="label">Why it matters:</span> Substitutes limit how much a firm can charge and how secure demand will be.</p>
+        <p><span class="label">Example:</span> Rental cars may face substitutes such as ridesharing, trains, or public transit.</p>
+      </div>
+
+      <div class="term">
+        <h3>Bargaining Power of Suppliers</h3>
+        <p><span class="label">Definition:</span> Supplier power is the ability of suppliers to demand better prices or terms from the firms that buy from them.</p>
+        <p><span class="label">Why it matters:</span> Powerful suppliers can squeeze a firm’s profits.</p>
+        <p><span class="label">Example:</span> If only a few suppliers provide a critical input, they may have strong leverage over buyers.</p>
+      </div>
+
+      <div class="term">
+        <h3>Bargaining Power of Customers</h3>
+        <p><span class="label">Definition:</span> Customer power is the ability of buyers to pressure firms for lower prices, better quality, or better service.</p>
+        <p><span class="label">Why it matters:</span> Powerful customers reduce a firm’s ability to earn strong margins.</p>
+        <p><span class="label">Example:</span> A large automaker buying paint in huge volume has more bargaining power than an individual student buying from a bookstore.</p>
+      </div>
+
+      <div class="term">
+        <h3>Barriers to Entry</h3>
+        <p><span class="label">Definition:</span> Barriers to entry are obstacles that make it difficult for new firms to enter an industry and compete.</p>
+        <p><span class="label">Why it matters:</span> Strong barriers to entry protect existing firms and can help preserve competitive advantage.</p>
+        <p><span class="label">Example:</span> Large startup costs, regulations, or strong brand loyalty can all be barriers to entry.</p>
+      </div>
+
+      <div class="term">
+        <h3>Value Chain</h3>
+        <p><span class="label">Definition:</span> A value chain is the set of internal activities a firm performs to create, deliver, and support a product or service.</p>
+        <p><span class="label">Why it matters:</span> Managers can use the value chain to identify where the firm is unique and where technology can strengthen its activities.</p>
+        <p><span class="label">Example:</span> Product design, manufacturing, marketing, and service are all parts of a value chain.</p>
+      </div>
+
+      <div class="term">
+        <h3>Supply Chain</h3>
+        <p><span class="label">Definition:</span> A supply chain is the broader network through which materials, products, and information move from suppliers to firms to customers.</p>
+        <p><span class="label">Why it matters:</span> The supply chain focuses on the external flow of goods, while the value chain focuses on internal value-creating activities.</p>
+        <p><span class="label">Example:</span> Raw materials moving from suppliers to a manufacturer and then to retailers are part of the supply chain.</p>
+      </div>
+
+      <div class="term">
+        <h3>Business Processes</h3>
+        <p><span class="label">Definition:</span> Business processes are structured sets of activities used to produce a specific business outcome.</p>
+        <p><span class="label">Why it matters:</span> Technology should streamline and support important processes instead of being added without purpose.</p>
+        <p><span class="label">Example:</span> Order fulfillment, payroll, and customer support are business processes.</p>
+      </div>
+
+      <div class="term">
+        <h3>Strategic Alignment</h3>
+        <p><span class="label">Definition:</span> Strategic alignment is the fit between a firm’s strategy, business processes, and information systems.</p>
+        <p><span class="label">Why it matters:</span> Technology creates more value when it supports the firm’s chosen strategy rather than existing as a separate add-on.</p>
+        <p><span class="label">Example:</span> Zara’s technology supports its fast-response model instead of being used just because it is new.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Key Concepts</h2>
+      <ul>
+        <li>Strategy is about being different, not just being slightly better at the same activities.</li>
+        <li>Competitive advantage depends on both industry structure and the firm’s internal choices.</li>
+        <li>Porter’s Five Forces helps managers understand where pressure on profits comes from.</li>
+        <li>Barriers to entry can protect firms from new competitors and support advantage.</li>
+        <li>The value chain focuses on internal value creation, while the supply chain focuses on the broader movement of goods and information.</li>
+        <li>Information systems should support strategy by strengthening processes and value chain activities.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Interactive Practice Quiz</h2>
+
+      <div class="question" data-qid="c2q1" data-correct="B">
+        <h3>1. A regional airline is deciding whether to copy a full-service national carrier or continue focusing on a low-cost model with fewer route types, faster turnaround times, and simpler operations. One executive argues that success means offering everything competitors offer, while another argues that the airline should keep a unique activity system that fits its target market.</h3>
+        <p><strong>Which response BEST matches Chapter 2’s view of strategy?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The first executive is right, because the best strategy is usually copying successful rivals as closely as possible</button>
+          <button class="choice-btn" data-choice="B">B. The second executive is right, because strategy is about choosing a distinct set of activities that create unique value</button>
+          <button class="choice-btn" data-choice="C">C. Both executives are right, because strategy only depends on having the most technology</button>
+          <button class="choice-btn" data-choice="D">D. Neither executive is right, because strategy is mostly irrelevant when rivalry is strong</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2q2" data-correct="D">
+        <h3>2. A firm in a profitable industry suddenly faces pressure because new startups can enter cheaply, customers can switch easily, and there are many substitute products available. The CEO is confused because the firm’s internal team is still strong and efficient.</h3>
+        <p><strong>Which idea BEST explains why profits may still fall?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The value chain guarantees high profits when internal operations are efficient</button>
+          <button class="choice-btn" data-choice="B">B. Competitive advantage depends only on the firm’s employees and not on industry conditions</button>
+          <button class="choice-btn" data-choice="C">C. The threat of substitutes only matters when suppliers are weak</button>
+          <button class="choice-btn" data-choice="D">D. Industry structure matters because strong competitive forces can reduce profitability even for well-run firms</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2q3" data-correct="A">
+        <h3>3. A manager is comparing two concepts. One describes the firm’s internal activities like design, marketing, and service. The other describes the broader movement of materials and goods from suppliers to the company to customers. She wants to label them correctly.</h3>
+        <p><strong>Which answer is correct?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The first concept is the value chain, and the second is the supply chain</button>
+          <button class="choice-btn" data-choice="B">B. The first concept is the supply chain, and the second is the value chain</button>
+          <button class="choice-btn" data-choice="C">C. Both concepts describe only external relationships with suppliers</button>
+          <button class="choice-btn" data-choice="D">D. Both concepts mean exactly the same thing in strategy analysis</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2q4" data-correct="C">
+        <h3>4. A new business wants to enter an industry, but it would need huge startup capital, regulatory approval, and years to build brand trust. Existing firms in the market are not perfect, but they still seem fairly protected from sudden new competition.</h3>
+        <p><strong>Which concept BEST explains this protection?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. Supplier power, because suppliers are stopping the new firm from entering</button>
+          <button class="choice-btn" data-choice="B">B. Threat of substitutes, because customers can choose different products</button>
+          <button class="choice-btn" data-choice="C">C. Barriers to entry, because major obstacles make it difficult for new competitors to enter</button>
+          <button class="choice-btn" data-choice="D">D. Customer power, because buyers are loyal to the current firms</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2q5" data-correct="B">
+        <h3>5. A company buys expensive new software because the leadership team believes every modern business should use advanced technology. However, the software does not improve the firm’s core processes or strengthen what makes the company different from competitors.</h3>
+        <p><strong>Which Chapter 2 lesson is MOST relevant?</strong></p>
+        <div class="choices">
+          <button class="choice-btn" data-choice="A">A. The software was still strategically useful because all new technology creates competitive advantage</button>
+          <button class="choice-btn" data-choice="B">B. Technology should support strategy and streamline important processes, not be adopted just for its own sake</button>
+          <button class="choice-btn" data-choice="C">C. The firm should ignore strategy until rivalry becomes weaker</button>
+          <button class="choice-btn" data-choice="D">D. The best way to use technology is to copy whatever industry leaders buy first</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <footer>
+      MIS 301 Extra Credit Study Guide • Chapter 2
+    </footer>
+  </div>
+
+  <script>
+    const feedbackMap = {
+      c2q1: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because Chapter 2 argues that strategy is not about trying to do everything competitors do. Copying rivals too closely weakens distinctiveness.',
+          B: 'B is correct because the chapter emphasizes that competitive strategy is about being different and choosing a unique set of activities that fit the target market.',
+          C: 'C is incorrect because technology alone does not define strategy. The chapter repeatedly ties technology to strategy and process fit, not to automatic success.',
+          D: 'D is incorrect because strategy still matters even in tough industries. In fact, distinct positioning becomes even more important when rivalry is strong.'
+        }
+      },
+      c2q2: {
+        correct: 'D',
+        rationale: {
+          A: 'A is incorrect because a strong value chain helps, but it does not guarantee high profits if the industry itself is structurally unattractive.',
+          B: 'B is incorrect because Chapter 2 specifically teaches that industry structure matters along with internal firm choices.',
+          C: 'C is incorrect because the threat of substitutes can matter on its own and does not depend on supplier strength in the way this answer suggests.',
+          D: 'D is correct because Porter’s Five Forces explains how strong competitive pressures from entrants, substitutes, and powerful buyers can reduce profitability even when a firm is well managed.'
+        }
+      },
+      c2q3: {
+        correct: 'A',
+        rationale: {
+          A: 'A is correct because the value chain focuses on the firm’s internal value-creating activities, while the supply chain focuses on the broader external flow of goods and information.',
+          B: 'B is incorrect because it reverses the two ideas. Internal activities are the value chain, not the supply chain.',
+          C: 'C is incorrect because the value chain is not limited to external supplier relationships. It includes internal activities such as operations, marketing, and service.',
+          D: 'D is incorrect because the two concepts are related but not identical. The chapter specifically distinguishes between them.'
+        }
+      },
+      c2q4: {
+        correct: 'C',
+        rationale: {
+          A: 'A is incorrect because supplier power is about leverage suppliers have over firms already in the industry, not the broader obstacles preventing entry.',
+          B: 'B is incorrect because substitutes are alternative products, not the startup hurdles that block new firms from entering.',
+          C: 'C is correct because barriers to entry are the obstacles that make it difficult for new firms to enter and compete, such as high capital needs, regulation, and brand loyalty.',
+          D: 'D is incorrect because customer loyalty can matter, but the scenario is mainly about structural obstacles to entering the industry.'
+        }
+      },
+      c2q5: {
+        correct: 'B',
+        rationale: {
+          A: 'A is incorrect because Chapter 2 does not say that all new technology creates competitive advantage. Technology only adds value when it supports strategy.',
+          B: 'B is correct because the chapter stresses that information systems should support strategy, improve processes, and strengthen the firm’s value chain rather than being adopted for appearance alone.',
+          C: 'C is incorrect because strategy should guide technology choices now, not only after rivalry changes.',
+          D: 'D is incorrect because blindly copying other firms is the opposite of the chapter’s message about choosing a distinct and coherent strategy.'
+        }
+      }
+    };
+
+    function buildFullExplanation(qid) {
+      const letters = ['A', 'B', 'C', 'D'];
+      const items = letters.map(letter => `<li><strong>${letter}.</strong> ${feedbackMap[qid].rationale[letter]}</li>`).join('');
+      return `<div style="margin-top:10px;"><strong>Answer review for all choices:</strong></div><ul style="margin-top:10px; padding-left:20px;">${items}</ul>`;
+    }
+
+    document.querySelectorAll('.question').forEach((questionEl) => {
+      const qid = questionEl.dataset.qid;
+      const buttons = questionEl.querySelectorAll('.choice-btn');
+      const feedback = questionEl.querySelector('.feedback');
+      const correct = questionEl.dataset.correct;
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.dataset.choice;
+
+          buttons.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('correct-choice', 'incorrect-choice');
+            if (b.dataset.choice === correct) b.classList.add('correct-choice');
+            if (b.dataset.choice === selected && selected !== correct) b.classList.add('incorrect-choice');
+          });
+
+          const fullExplanation = buildFullExplanation(qid);
+
+          if (selected === correct) {
+            feedback.className = 'feedback show correct';
+            feedback.innerHTML = `<strong>Correct.</strong> You chose the right answer. ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          } else {
+            feedback.className = 'feedback show incorrect';
+            feedback.innerHTML = `<strong>Incorrect.</strong> You chose ${selected}, but the correct answer is ${correct}. ${feedbackMap[qid].rationale[selected]} ${feedbackMap[qid].rationale[correct]}${fullExplanation}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
